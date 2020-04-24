@@ -9,15 +9,16 @@
 	<h5>Without showing log</h5>
 
 	<?php
-		$log =(bool)false;
 		include("create_database.php");
-		include("create_utilisateur.php");
+    createDatabase();
+		createTableUtilisateur();
+		createTableTransaction();
 	?>
 	<h5>Showing log</h5>
 	<?php
-		$log =(bool)true;
-		include("create_database.php");
-		include("create_utilisateur.php");
+    createDatabase(true);
+		createTableUtilisateur(true);
+		createTableTransaction(true);
 	?>
 	<!--to had a new user if name is written in the url-->
 	<p>

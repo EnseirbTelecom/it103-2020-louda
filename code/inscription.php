@@ -1,8 +1,11 @@
 <?php
     session_start();
     include("create_database.php");
-    include("create_utilisateur.php");
-    
+    createDatabase();
+    createTableUtilisateur();
+    createTableTransaction();
+    include("database_request.php");
+
     $bdd =  mysqli_connect("localhost","admin","it103","louda");
                 if ($bdd->connect_error) {
                     die("Connexion failed: " . $bdd->connect_error);
@@ -10,7 +13,7 @@
                     //echo "Connexion successful <br />";
                 }
 
-                
+
     if (isset($_POST['email'], $_POST['fname'], $_POST['lname'],$_POST['birth'],$_POST['pseudo'], $_POST['psw'],$_POST['confpsw'])){
 
         // Initialisation of error variables
@@ -19,16 +22,16 @@
         $testpsw = 0;
         $error = true;
 
-        // Change date format  
+        // Change date format
         $Date = $_POST['birth'];
         $newDate = implode('-', array_reverse (explode('/',$Date)));
 
-        // Check if Pseudo and email are already taken 
+        // Check if Pseudo and email are already taken
         $req = "SELECT * FROM `utilisateur` WHERE email ='".$_POST['email']."'";
         $req2 = "SELECT * FROM `utilisateur` WHERE pseudo ='".$_POST['pseudo']."'";
         $email = mysqli_query($bdd,$req);
         $pseudo = mysqli_query($bdd,$req2);
-        
+
         // Check if every field is correct and answered
 
         if(empty($_POST['fname'])){
@@ -38,17 +41,17 @@
         if(empty($_POST['lname'])){
             $error = false;
         }
-        // Email 
+        // Email
         if (empty($_POST['email'])){
             $error = false;
         }
-        // Date de naissance 
+        // Date de naissance
         if (empty($_POST['birth'])){
             $error = false;
         }
         // Pseudo is not required
- 
-        // Mot de passe 
+
+        // Mot de passe
         if(empty($_POST['psw'])){
             $error = false;
         }
@@ -64,9 +67,9 @@
             if (mysqli_num_rows($email) != 1) {
                 if (mysqli_num_rows($pseudo) != 1){
                     /* Permet d'avoir les logs
-                    /*$request = ("INSERT INTO `utilisateur` (`email`, `mot_de_passe` ,`prenom` ,`nom` ,`pseudo` ,`date_de_naissance`) 
+                    /*$request = ("INSERT INTO `utilisateur` (`email`, `mot_de_passe` ,`prenom` ,`nom` ,`pseudo` ,`date_de_naissance`)
                         VALUES ( '". $_POST['email'] ."' ,'". $_POST['psw'] ."' ,'". $_POST['fname'] ."','". $_POST['lname'] ."' ,'". $_POST['pseudo'] ."' , '". $newDate ."')");*/
-                    mysqli_query($bdd,"INSERT INTO `utilisateur` (`email`, `mot_de_passe` ,`prenom` ,`nom` ,`pseudo` ,`date_de_naissance`) 
+                    mysqli_query($bdd,"INSERT INTO `utilisateur` (`email`, `mot_de_passe` ,`prenom` ,`nom` ,`pseudo` ,`date_de_naissance`)
                         VALUES ( '". $_POST['email'] ."' ,'". $_POST['psw'] ."' ,'". $_POST['fname'] ."','". $_POST['lname'] ."' ,'". $_POST['pseudo'] ."' , '" . $newDate . "' )");
                     //echo "$request <br />";
                 }
@@ -210,10 +213,3 @@
         </form>
     </div>
     </body>
-
-
-
-
-
-    
-  

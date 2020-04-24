@@ -1,7 +1,7 @@
 <?php
 
 include("create_database.php");
-include("create_utilisateur.php");
+include("database_request.php");
 
   if(isset($_POST['email']) && isset($_POST['pwd'])){
     if(!empty($_POST['email']) || !empty($_POST['pwd'])){
