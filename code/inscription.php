@@ -6,13 +6,7 @@
     createTableUtilisateur();
     createTableTransaction();
 
-    $bdd =  mysqli_connect("localhost","admin","it103","louda");
-                if ($bdd->connect_error) {
-                    die("Connexion failed: " . $bdd->connect_error);
-                } else {
-                    //echo "Connexion successful <br />";
-                }
-
+    $bdd = connectdatabase();
 
     if (isset($_POST['email'], $_POST['fname'], $_POST['lname'],$_POST['birth'],$_POST['pseudo'], $_POST['psw'],$_POST['confpsw'])){
 
@@ -90,6 +84,7 @@
 		} else {
 			echo "ERROR : " . $request . " " . mysqli_error($bdd) . "<br />";
         }*/
+    $bdd->close();
 ?>
 
 
