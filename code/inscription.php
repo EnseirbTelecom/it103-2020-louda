@@ -65,13 +65,14 @@
         }
         if ($error == true ){
             if (mysqli_num_rows($email) != 1) {
-                if (mysqli_num_rows($pseudo) != 1){
+                if ((mysqli_num_rows($pseudo) != 1) || (empty($_POST['pseudo']))){
                     /* Permet d'avoir les logs
                     /*$request = ("INSERT INTO `utilisateur` (`email`, `mot_de_passe` ,`prenom` ,`nom` ,`pseudo` ,`date_de_naissance`)
                         VALUES ( '". $_POST['email'] ."' ,'". $_POST['psw'] ."' ,'". $_POST['fname'] ."','". $_POST['lname'] ."' ,'". $_POST['pseudo'] ."' , '". $newDate ."')");*/
                     mysqli_query($bdd,"INSERT INTO `utilisateur` (`email`, `mot_de_passe` ,`prenom` ,`nom` ,`pseudo` ,`date_de_naissance`)
                         VALUES ( '". $_POST['email'] ."' ,'". $_POST['psw'] ."' ,'". $_POST['fname'] ."','". $_POST['lname'] ."' ,'". $_POST['pseudo'] ."' , '" . $newDate . "' )");
                     //echo "$request <br />";
+                    header("location: connexion_page.php");
                 }
                 else {
                     $testpseudo = 1;
@@ -112,7 +113,7 @@
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white">
         <h1 class="my-0 mr-md-auto font-weight-normal">Titre du site</h1>
         <!-- A remplacer par un boutton clickable qui renvoie vers la page de connexion-->
-        <a class="btn btn-outline-primary" id="signin" href="#">Connexion</a>
+        <a class="btn btn-outline-primary" id="signin" href="connexion_page.php">Connexion</a>
     </div>
     <div class="container">
         <div class="header offset-md-3">
@@ -125,7 +126,7 @@
             <div class="form-group row">
                 <label for="fname" class="col-sm-2 col-form-label offset-md-3">Prénom</label>
                 <div class="col-sm-2">
-                    <input type="text"  id="fname" name="fname" placeholder="Prénom" class="form-control" required>
+                    <input type="text"  id="fname" name="fname" placeholder="Prénom" class="form-control" value="<?php echo $_POST['fname'];?>" required> 
                     <div class="valid-feedback">Ok !</div>
                     <div class="invalid-feedback">Prénom manquant</div>
                 </div>
@@ -135,7 +136,7 @@
             <div class="form-group row ">
                 <label for="lname" class="col-sm-2 col-form-label offset-md-3">Nom</label>
                 <div class="col-sm-2">
-                    <input type="text"  id="lname" name="lname" placeholder="Nom" class="form-control" required>
+                    <input type="text"  id="lname" name="lname" placeholder="Nom" class="form-control" value="<?php echo $_POST['lname'];?>" required>
                     <div class="valid-feedback">Ok !</div>
                     <div class="invalid-feedback">Nom manquant</div>
                 </div>
@@ -145,7 +146,7 @@
             <div class="form-group row ">
                 <label for="email" class="col-sm-2 col-form-label offset-md-3">Email</label>
                 <div class="col-sm-2 ">
-                    <input type="email"  id="email" name="email" placeholder="Email" class="form-control" required>
+                    <input type="email"  id="email" name="email" placeholder="Email" class="form-control" value="<?php echo $_POST['email'];?>" required>
                     <div class="valid-feedback">Ok !</div>
                     <div class="invalid-feedback">Email manquant</div>
                 </div>
@@ -160,7 +161,7 @@
             <div class="form-group row ">
                 <label for="birth" class="col-sm-2 col-form-label offset-md-3">Date de naissance</label>
                 <div class="col-sm-2">
-                    <input type="text"  id="birth" name="birth" placeholder="ex : 01/01/2001" class="form-control" required>
+                    <input type="text"  id="birth" name="birth" placeholder="ex : 01/01/2001" class="form-control" value="<?php echo $_POST['birth'];?>" required>
                     <div class="valid-feedback">Ok !</div>
                     <div class="invalid-feedback">Date de naissance manquante</div>
                 </div>
@@ -170,7 +171,7 @@
             <div class="form-group row ">
                 <label for="pseudo" class="col-sm-2 col-form-label offset-md-3">Pseudo</label>
                 <div class="col-sm-2">
-                    <input type="text"  id="pseudo" name="pseudo" placeholder="Pseudo" class="form-control">
+                    <input type="text"  id="pseudo" name="pseudo" placeholder="Pseudo" value="<?php echo $_POST['pseudo'];?>"  class="form-control">
                 </div>
                 <div class="col-auto ">
                     <!--<?php if ($testpseudo == 1) { ?>-->
