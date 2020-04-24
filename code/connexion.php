@@ -1,7 +1,7 @@
 <?php
 
 include("create_database.php");
-include("database_request.php");
+include("create_utilisateur.php");
 
   if(isset($_POST['email']) && isset($_POST['pwd'])){
     if(!empty($_POST['email']) || !empty($_POST['pwd'])){
@@ -18,13 +18,16 @@ include("database_request.php");
       $row = mysqli_fetch_array($result);
       $count = $row['count(*)'];
       if($count!=0){
+        session_start();
+        $_SESSION['email']=$_POST['email'];
+        $_SESSION['pwd']=$_POST['pwd'];
 
-      $SESSION['email']=$_POST['email'];
-      $SESSION['pwd']=$_POST['pwd'];
-
-  header("location: inscription.php");}
-else {
-      header("location: connexion_page.php?erreur=1");}}}
+        header("location: home_page.php");}
+        else {
+          header("location: connexion_page.php?erreur=1");
+        }
+        }
+      }
 
 mysqli_close($connexion);
 

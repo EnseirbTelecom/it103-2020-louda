@@ -2,9 +2,9 @@
     session_start();
     include("create_database.php");
     createDatabase();
+    include("create_utilisateur.php");
     createTableUtilisateur();
     createTableTransaction();
-    include("database_request.php");
 
     $bdd =  mysqli_connect("localhost","admin","it103","louda");
                 if ($bdd->connect_error) {
