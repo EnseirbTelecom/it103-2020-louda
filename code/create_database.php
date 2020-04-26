@@ -22,14 +22,15 @@
 
    return $link;
  }
- 
+
  function executeRequest($bdd,$request,$log = false){
-   if (mysqli_query($bdd,$request)) {
+   $result = mysqli_query($bdd,$request);
+   if ($result) {
        if ($log){echo "Request is done successfully <br />";}
    } else {
        if ($log){echo "Error during request: ".$request ." : <br />" . mysqli_error($bdd) . "<br />";}
    }
-   return mysqli_query($bdd,$request);
+   return $result;
  }
 
  function createDatabase($log = false){
