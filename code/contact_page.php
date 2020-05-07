@@ -3,6 +3,18 @@ session_start();
 if (empty($_SESSION)){
     header("location: connexion_page.php");
 }
+
+else{
+  if(time()-$_SESSION['last_time'] >3600 ){
+    header("location:déconnexion.php");
+  }
+  else{
+    $_SESSION['last_time']=time();
+  }
+}
+
+
+
 include("create_database.php");
 include("database_request.php");
 $me = getUtilisateurWithEmail($_SESSION["email"]);

@@ -62,13 +62,25 @@
        id_transaction INT(11) AUTO_INCREMENT PRIMARY KEY,
        id_utilisateur_source INT(11),
        id_utilisateur_cible INT(11),
+       nom_de_la_transaction TEXT ,
        date_et_heure_de_creation DATETIME NOT NULL,
-       date_de_naissance DATETIME,
+       date_de_de_fermeture DATETIME,
        montant DECIMAL,
-       message TEXT,
        message_cloture TEXT,
+       message TEXT,
        statut TEXT NOT NULL)";
      executeRequest($bdd,$create,$log);
      $bdd->close();
    }
-?>
+
+   function createTableAmitie($log=false){
+     $bdd = connectDatabase($log);
+
+     $create = "CREATE TABLE amitie(
+       id_amitie INT(11) AUTO_INCREMENT PRIMARY KEY,
+       id_utilisateur_1 INT(11),
+       id_utilisateur_2 INT(11))";
+     executeRequest($bdd,$create,$log);
+     $bdd->close();
+   }
+   ?>
