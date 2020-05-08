@@ -6,7 +6,7 @@
     createTableUtilisateur();
     createTableTransaction();
 
-    $bdd = connectdatabase();
+    $bdd = connectDatabase();
 
     if (isset($_POST['email'], $_POST['fname'], $_POST['lname'],$_POST['birth'],$_POST['pseudo'], $_POST['psw'],$_POST['confpsw'])){
 
