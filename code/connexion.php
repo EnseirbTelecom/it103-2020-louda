@@ -21,7 +21,7 @@ include("create_utilisateur.php");
         session_start();
         $_SESSION['email']=$_POST['email'];
         $_SESSION['pwd']=$_POST['pwd'];
-
+        $_SESSION['last_time']=time();
         header("location: home_page.php");}
         else {
           header("location: connexion_page.php?erreur=1");
