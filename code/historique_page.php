@@ -3,7 +3,6 @@ session_start();
 if (empty($_SESSION)){
     header("location: connexion_page.php");
 }
-<<<<<<< HEAD
 include("database_request.php");
 include("create_database.php");
 
@@ -26,7 +25,7 @@ $CloseDate = $_POST['today_date'];
 $id = $_POST['id_transaction'];
 if (!empty($CloseDate) && !empty($CloseMessage)){
   CloseTransaction($id,$CloseDate,$CloseMessage);
-=======
+}
 else{
   if(time()-$_SESSION['last_time'] >3600 ){
     header("location:déconnexion.php");
@@ -34,7 +33,6 @@ else{
   else{
     $_SESSION['last_time']=time();
   }
->>>>>>> 51641d66b3278f13ca9948e3a0df297c7c3fff10
 }
 ?>
 

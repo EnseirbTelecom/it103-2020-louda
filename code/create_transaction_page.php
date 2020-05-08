@@ -42,8 +42,8 @@ createTableAmitie();
           <div class="row ">
               <div class= "col"> <a href ='home_page.php'> Home</a></div>
               <div class= "col"> <a href ='contact_page.php'> Carnet d'amis</a></div>
-              <div class= "col"> <a href ='create_transaction_page.php'> Nouvelle transaction</a></div>
-              <div class= "col"> <a class="col-sm bg-primary text-white rounded text-center" href ='historique_page.php'> Historique</a></div>
+              <div class= "col"> <a class="col-sm bg-primary text-white rounded text-center" href ='create_transaction_page.php'> Nouvelle transaction</a></div>
+              <div class= "col"> <a href ='historique_page.php'> Historique</a></div>
               <div class= "col"> <a class="btn btn-outline-primary" href ='déconnexion.php'> déconnexion</a></div>
         </div>
 
