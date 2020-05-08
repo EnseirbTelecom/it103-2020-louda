@@ -100,7 +100,7 @@ createTableAmitie();
         if( isset($_POST['trans']) && isset($_POST['des_trans']) && isset($_POST['montant']) && isset($_POST['source']) && isset($_POST['cible'])){
         if( !empty($_POST['trans']) && !empty($_POST['des_trans'])  && !empty($_POST['montant']) && !empty($_POST['source']) && !empty($_POST['cible'])){
 
-        $date_creation =  date('d-m-Y H:i:s');
+        $date_creation =  date('Y-m-d H:i:s');
         $statut = "ouvert";
         $montant=$_POST['montant'];
 
@@ -119,8 +119,8 @@ createTableAmitie();
        $nom_cible = $res2["nom"];
        $prenom_cible = $res2["prenom"];
 
-       $request = "INSERT INTO `transaction` (`nom_de_la_transaction`,`statut`,`id_utilisateur_cible`,`id_utilisateur_source`,`montant`,`date_et_heure_de_creation`,`message`) VALUES ( '".$_POST['trans']."','". $statut."','". $_POST['source']."','". $_POST['cible'] ."','". $_POST['montant'] ."','". $date_creation."','".$_POST['des_trans']."')";
-       executeRequest($connexion,$request);
+       $request = "INSERT INTO `transaction` (`nom_de_la_transaction`,`statut`,`id_utilisateur_source`,`id_utilisateur_cible`,`montant`,`date_et_heure_de_creation`,`message`) VALUES ( '".$_POST['trans']."','". $statut."','". $_POST['source']."','". $_POST['cible'] ."','". $_POST['montant'] ."','". $date_creation."','".$_POST['des_trans']."')";
+       executeRequest($connexion,$request,true);
        ?>
 
     <div class="row justify-content-center"> Récapitulatif de la transaction:</div>

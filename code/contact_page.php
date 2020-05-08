@@ -38,9 +38,9 @@ function filter($input){
 
 function ajouterAmi($myId,$friendId){
   //return an array of all users who are different not current user
-  $log=false;
+  $log=true;
   $bdd = connectDatabase($log);
-  $all = "INSERT INTO amitie (id_utilisateur1, id_utilisateur2) VALUES ('$myId','$friendId')";
+  $all = "INSERT INTO amitie (id_utilisateur_1, id_utilisateur_2) VALUES ('$myId','$friendId')";
   $result = executeRequest($bdd,$all,$log);
   $bdd->close();
 }

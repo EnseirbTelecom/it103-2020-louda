@@ -50,7 +50,7 @@
           $select = "SELECT * FROM transaction WHERE (
             (id_utilisateur_source='$myId')
           Or
-            (id_utilisateur_cible='$myId')) 
+            (id_utilisateur_cible='$myId'))
           order by date_et_heure_de_creation $asc";
         break;
         case 1:
@@ -58,7 +58,7 @@
             (id_utilisateur_source='$myId')
           Or
             (id_utilisateur_cible='$myId'))
-          AND 
+          AND
             (statut='Ouverte'))
           order by date_et_heure_de_creation $asc";
         break;
@@ -67,7 +67,7 @@
             (id_utilisateur_source='$myId')
           Or
             (id_utilisateur_cible='$myId'))
-          AND 
+          AND
             (statut='Fermee'))
           order by date_et_heure_de_creation $asc";
         break;
@@ -114,19 +114,19 @@
     function getAllFriends($myId,$log=false){
       //return an array of all friends of the current user
       $bdd = connectDatabase($log);
-      $select = "SELECT * FROM `amitie` WHERE (id_utilisateur1='$myId' OR id_utilisateur2='$myId')";
+      $select = "SELECT * FROM `amitie` WHERE (id_utilisateur_1='$myId' OR id_utilisateur_2='$myId')";
       $result = executeRequest($bdd,$select,$log);
       $ind = 0;
       if ($result->num_rows > 0) {
           $Friends = array();
           while($row = $result->fetch_assoc()) {
-            $id = $row["id_utilisateur1"] +$row["id_utilisateur2"];
+            $id = $row["id_utilisateur_1"] +$row["id_utilisateur_2"];
             $id -= $myId;
             $ami = getUtilisateurWithId($id);
             $ami["id_amitie"] =$row['id_amitie'];
             $Friends += array($ind => $ami);
             if ($log){
-              echo "id: " . $row["id_amitié"]. " - users: " . $row["id_utilisateur1"]. " : " . $row["id_utilisateur2"]. "<br>";
+              echo "id: " . $row["id_amitié"]. " - users: " . $row["id_utilisateur_1"]. " : " . $row["id_utilisateur_2"]. "<br>";
             }
             $ind++;
           }
