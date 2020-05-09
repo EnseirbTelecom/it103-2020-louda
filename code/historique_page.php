@@ -207,7 +207,7 @@ else{
                         </div>
                         <div class="modal-footer">
                           <input type="hidden" value="<?php echo $transaction['id_transaction']?>" name="id_transaction">
-                          <input type="submit" class="btn btn-secondary" value="Fermer la transaction">
+                          <input type="submit" class="btn btn-success" value="Fermer la transaction">
                         </div>
                         </form>
                       </div>
@@ -240,7 +240,8 @@ else{
                         </div>
                         <div class="modal-footer">
                           <input type="hidden" value="<?php echo $transaction['id_transaction']?>" name="id_transaction">
-                          <input type="submit" class="btn btn-secondary" value="Modifier la transaction">
+                        
+                          <input type="submit" class="btn btn-success" value="Modifier la transaction">
                         </div>
                         </form>
                       </div>

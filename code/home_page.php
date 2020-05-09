@@ -22,24 +22,19 @@ else{
     <title>Page d'accueil </title>
   </head>
 <body>
-  <div class="container">
-    <div class="row ">
-      <div class="col-8">
-        <h1>Titre du site</h1>
-      </div>
-    </div>
+  <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white">
+          <h1 class="my-0 mr-md-auto font-weight-normal">Titre du site</h1>
+          <div class="container">
+              <div class="row ">
+                  <div class= "col"> <a class="col-sm bg-primary text-white rounded text-center" href ='home_page.php'> Home</a></div>
+                  <div class= "col"> <a href ='contact_page.php'> Carnet d'amis</a></div>
+                  <div class= "col"> <a href ='create_transaction_page.php'> Nouvelle transaction</a></div>
+                  <div class= "col"> <a href ='historique_page.php'> Historique</a></div>
+              </div>
+          </div> 
+          <a class="btn btn-outline-primary" id="signin" href="déconnexion_page.php">Déconnexion</a>
   </div>
-
-  <div class="container">
-    <div class="row ">
-        <div class= "col"> <a class="col-sm bg-primary text-white rounded text-center" href ='home_page.php'> Home</a></div>
-        <div class= "col"> <a href ='contact_page.php'> Carnet d'amis</a></div>
-        <div class= "col"> <a href ='create_transaction_page.php'> Nouvelle transaction</a></div>
-        <div class= "col"> <a href ='historique_page.php'> Historique</a></div>
-        <div class= "col"> <a class="btn btn-outline-primary"href ='déconnexion.php'> déconnexion</a></div>
-    </div>
-  </div>
-
+  
 <?php
 
 if(isset($_GET['erreur'])){
