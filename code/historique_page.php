@@ -7,7 +7,13 @@ include("database_request.php");
 include("create_database.php");
 
 $me = getUtilisateurWithEmail($_SESSION["email"]);
-$s = $_POST['search'];
+if (!empty($_POST['search'])) { 
+  $s = $_POST['search']; 
+}
+else {
+  $s = NULL;
+}
+
 $search="";
 
 if (isset($_GET['selection'])){
@@ -16,15 +22,25 @@ if (isset($_GET['selection'])){
   }
 }
 
-$DateSelected = isset( $_GET['Open_date'] ) ? $_GET['Open_date'] : "" ;
-$StatueSelected = isset( $_GET['statue'] ) ? $_GET['statue'] : "" ;
-$selectedValue = "selected";
+//$DateSelected = isset( $_GET['Open_date'] ) ? $_GET['Open_date'] : "" ;
+//$StatueSelected = isset( $_GET['statue'] ) ? $_GET['statue'] : "" ;
+$DateSelected = $_POST['Open_date'];
+$SelectedValue = $_POST['statue'];
+$Debt_selection = $_POST['Account'];
 
 $CloseMessage = $_POST['message_text'];
 $CloseDate = $_POST['today_date'];
+$CloseStatue = $_POST['Close_reason'];
 $id = $_POST['id_transaction'];
+
+$NewMessage = $_POST['new_message_text'];
+$NewAmount = $_POST['new_amount'];
+
+if (!empty($NewAmount) || !empty($NewMessage)){
+  ModifTransaction($id,$NewMessage,$NewAmount);
+}
 if (!empty($CloseDate) && !empty($CloseMessage)){
-  CloseTransaction($id,$CloseDate,$CloseMessage);
+  CloseTransaction($id,$CloseDate,$CloseMessage,$CloseStatue);
 }
 else{
   if(time()-$_SESSION['last_time'] >3600 ){
@@ -66,21 +82,17 @@ else{
         <thead class="thead-light">
           <tr>
             <th>Prénom
-              <div class="form-inline">
                   <div class="col">
-                    <input class="form-control mr-sm-2" id="search" name="search" type="search" placeholder="Search" aria-label="Search"  value="<?php echo $_POST['search'];?>">
+                    <input class="form-control" id="search" name="search" type="search" placeholder="Search" aria-label="Search"  value="<?php echo $_POST['search'];?>">
                   </div>
-                  <div class="col">
-                    <input type="submit" value="Search">
-                  </div>
-              </div>
             </th>
+            <th> Nom de la transaction </th>
               <th>Dettes ou créances
                 <div class="mr-sm-2 dropdown">
-                  <select class="browser-default custom-select">
-                    <option value="1">Dettes et créances</option>
-                    <option value="2">Dettes</option>
-                    <option value="3">Créances</option> 
+                  <select name="Account" class="browser-default custom-select">
+                    <option value="1" <?php if( $Debt_selection == "1") {echo "selected";} ?>>Dettes et créances</option>
+                    <option value="2" <?php if( $Debt_selection == "2") {echo "selected";} ?>>Dettes</option>
+                    <option value="3" <?php if( $Debt_selection == "3") {echo "selected";} ?>>Créances</option> 
                   </select>
                 </div>
               </th>
@@ -88,8 +100,8 @@ else{
               <th>Date d'ouverture
                 <div class="mr-sm-2 dropdown">
                   <select name="Open_date" class="browser-default custom-select">
-                    <option value="1" <?php if( $DateSelected == "1") echo $selectedValue;?>>Croissante</option>
-                    <option value="2" <?php if( $DateSelected == "2") echo $selectedValue; ?>>Décroissante</option>
+                    <option value="2" <?php if( $DateSelected == "2") {echo "selected";} ?>>Décroissante</option>
+                    <option value="1" <?php if( $DateSelected == "1") {echo "selected";} ?>>Croissante</option>
                   </select>
                 </div>
               </th>
@@ -98,9 +110,10 @@ else{
               <th>Statut de la transaction
                 <div class="mr-sm-8 dropdown">
                   <select name="statue" class="browser-default custom-select">
-                    <option value="1" <?php if( $StatueSelected == "1") echo $selectedValue;?>>Ouverte</option>
-                    <option value="2"<?php if( $StatueSelected == "2") echo $selectedValue; ?>>Fermée</option>
-                    <option value="3" selected <?php if( $StatueSelected == "3") echo $selectedValue; ?>>Toute</option> 
+                    <option value="1" <?php if( $SelectedValue == "1") {echo "selected";} ?>>Ouvert</option>
+                    <option value="2"<?php if( $SelectedValue == "2") {echo "selected";} ?>>Remboursée</option>
+                    <option value="3"<?php if( $SelectedValue == "3") {echo "selected";} ?>>Annulée</option>
+                    <option value="4" <?php if( $SelectedValue == "4") {echo "selected";} ?>>Toute</option> 
                   </select>
                 </div>
               </th>
@@ -111,35 +124,49 @@ else{
         </thead>
         <tbody>
           <?php
-              if(isset($_POST['Open_date']) && isset($_POST['statue'])) {
+              if(isset($_POST['Open_date']) && isset($_POST['statue']) && isset($_POST['statue'])) {
                 $open_date = ceil($_POST['Open_date']);
                 $statue = ceil($_POST['statue']);
+                $Debt_Receivables = ceil($_POST['Account']);
               } 
-
-              $alltransaction = getMyTransactions($me['id_utilisateur'],$open_date,$statue);
+              $alltransaction = getMyTransactions($me['id_utilisateur'],$open_date,$statue,$Debt_Receivables);
               foreach ( $alltransaction as $transaction ) {
-                if (empty($s)){
-                  $rows = SelectUser($transaction['id_utilisateur_cible']);
+                $var=Test_my_id($me['id_utilisateur'],$transaction['id_utilisateur_source'],$transaction['id_utilisateur_cible']);
+
+                if ($var==1){
+                  if (empty($s)){
+                    $rows = SelectUser($transaction['id_utilisateur_source']);
+                  }
+                  else {
+                    $rows = Update_UserSelection($s,$transaction['id_utilisateur_source']);
+                  }
                 }
                 else {
-                  $rows = Update_UserSelection($s,$transaction['id_utilisateur_cible']);
+                  if (empty($s)){
+                    $rows = SelectUser($transaction['id_utilisateur_cible']);
+                  }
+                  else {
+                   
+                    $rows = Update_UserSelection($s,$transaction['id_utilisateur_cible']);
+                  }
                 }
                 foreach ( $rows as $user) {
             ?>
-              <tr <?php if ($transaction['statut']=='Fermee') { ?> class="table-secondary" <?php }?> >
+              <tr <?php if ($transaction['statut']!='Ouvert') { ?> class="table-secondary" <?php }?> >
                 <td><?php echo $user['prenom']." ".$user['nom']; ?></td>
-                <td><?php echo $transaction['montant']; ?></td>
+                <td><?php echo $transaction['nom_de_la_transaction'];?></td>
+                <td <?php if ($var==1){echo 'style="color:red;"';?>><?php echo "- ".$transaction['montant']; ?><?php } elseif ($var==0) {echo 'style="color:green;"';?>><?php echo "+ ".$transaction['montant'];} ?></td>
                 <td><?php echo $transaction['message']; ?></td>
                 <td><?php echo $transaction['date_et_heure_de_creation']; ?></td>
                 <td><?php echo $transaction['date_de_fermeture']; ?></td>
                 <td><?php echo $transaction['statut']; ?></td>
-                <td><?php if ($transaction['statut']=='Ouverte') { ?>
-                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#<?php echo "transaction".$transaction['id_transaction'];?>" data-whatever="@getbootstrap">Fermer</button>
-                  <div class="modal fade" id="<?php echo "transaction".$transaction['id_transaction'];?>" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <td><?php if ($transaction['statut']=='Ouvert') { ?>
+                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#<?php echo "transaction".$transaction['id_transaction'];?>" >Fermer</button>
+                  <div class="modal fade" id="<?php echo "transaction".$transaction['id_transaction'];?>" tabindex="-1" data-backdrop="static" role="dialog" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
                           <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Fermer la transaction : <?php echo $transaction['message'];?> </h5>
+                            <h5 class="modal-title" id="Close_title">Fermer la transaction : <?php echo $transaction['nom_de_la_transaction'];?> </h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
                             </button>
@@ -163,15 +190,15 @@ else{
                                   <legend class="col-form-label col-md-3 pt-0">Statut de fermeture</legend>
                                   <div class="col-sm-10">
                                       <div class="form-check">
-                                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
-                                      <label class="form-check-label" for="gridRadios1">
+                                      <input class="form-check-input" type="radio" name="Close_reason" id="Close_reason1" value="Remboursee" checked>
+                                      <label class="form-check-label" for="Close_reason1">
                                           Remboursement
                                       </label>
                                       </div>
                                       <div class="form-check">
-                                          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
-                                          <label class="form-check-label" for="gridRadios2">
-                                              Annulation
+                                          <input class="form-check-input" type="radio" name="Close_reason" id="Close_reason2" value="Annulee">
+                                          <label class="form-check-label" for="Close_reason2">
+                                          Annulation
                                           </label>
                                       </div>
                                   </div>
@@ -179,17 +206,47 @@ else{
                               </fieldset>
                         </div>
                         <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                           <input type="hidden" value="<?php echo $transaction['id_transaction']?>" name="id_transaction">
-                          <input type="submit" value="Fermer">
+                          <input type="submit" class="btn btn-secondary" value="Fermer la transaction">
                         </div>
                         </form>
                       </div>
                     </div>
                   </div>
-                  <a href="#" class="btn btn-info active" role="button" aria-pressed="true">Modifier</a>
-                  <?php } else {
-                  ?><a href="#" class="btn btn-secondary" role="button" disabled>Fermer</a><?php } ?> </td>
+                  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#<?php echo "La_transaction".$transaction['id_transaction'];?>" >Modifier</button>
+                  <div class="modal fade" id="<?php echo "La_transaction".$transaction['id_transaction'];?>" tabindex="-1" data-backdrop="static" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="Modif_title">Modifier la transaction : <?php echo $transaction['nom_de_la_transaction'];?> </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                          <form class="form-horizontal" action='historique_page.php' method="POST">
+                              <div class="form-group row offset-md-1">
+                                  <label for="message_text" class="col-md-3 form-control-label">Nouveau message  :</label>
+                                  <div class="col-sm-10">
+                                      <textarea class="form-control" id="message_text" name="new_message_text" ><?php echo $transaction['message'];?></textarea>
+                                  </div>
+                              </div>
+                              <div class="form-group row offset-md-1">
+                                  <label for="new_amount" class="col-form-label col-md-3">Nouveau montant de la transaction  :</label>
+                                  <div class="col-sm-10">
+                                      <input type="number" step ="0.01"  min="0" id="new_amount" name="new_amount"  class="form-control">
+                                  </div>
+                              </div>
+                        </div>
+                        <div class="modal-footer">
+                          <input type="hidden" value="<?php echo $transaction['id_transaction']?>" name="id_transaction">
+                          <input type="submit" class="btn btn-secondary" value="Modifier la transaction">
+                        </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  <?php } ?> </td>
               </tr>
           <?php } } ?>
         </tbody>

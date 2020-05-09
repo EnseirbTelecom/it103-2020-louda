@@ -56,8 +56,7 @@ createTableAmitie();
 
           <div class="form-group">
           <label> Description de la transaction: </label>
-          <textarea class ="form-control" name="des_trans"  placeholder="décrire votre transaction" rows="3" cols="6" >
-          </textarea>
+          <textarea class ="form-control" name="des_trans"  placeholder="décrire votre transaction" rows="3" cols="6" ></textarea>
           </div>
 
 
@@ -101,7 +100,7 @@ createTableAmitie();
         if( !empty($_POST['trans']) && !empty($_POST['des_trans'])  && !empty($_POST['montant']) && !empty($_POST['source']) && !empty($_POST['cible'])){
 
         $date_creation =  date('Y-m-d H:i:s');
-        $statut = "ouvert";
+        $statut = "Ouvert";
         $montant=$_POST['montant'];
 
        $id_source = $_POST['source'];
@@ -120,7 +119,7 @@ createTableAmitie();
        $prenom_cible = $res2["prenom"];
 
        $request = "INSERT INTO `transaction` (`nom_de_la_transaction`,`statut`,`id_utilisateur_source`,`id_utilisateur_cible`,`montant`,`date_et_heure_de_creation`,`message`) VALUES ( '".$_POST['trans']."','". $statut."','". $_POST['source']."','". $_POST['cible'] ."','". $_POST['montant'] ."','". $date_creation."','".$_POST['des_trans']."')";
-       executeRequest($connexion,$request,true);
+       executeRequest($connexion,$request);
        ?>
 
     <div class="row justify-content-center"> Récapitulatif de la transaction:</div>

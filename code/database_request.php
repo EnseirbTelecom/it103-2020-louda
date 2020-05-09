@@ -25,17 +25,59 @@
       }
       return $rows;
     }
-
-    function CloseTransaction($id_transaction,$Close_date,$Close_message)
+    
+    // La fonction fonctionne mais je n'arrive pas à l'utiliser comme je souhaite
+    function Select_correct_user($research,$id_source,$id_cible,$var)
     {
-      $log = true;
+      if ($research!=NULL){
+        if ($var==0){
+          $select = Update_UserSelection($research,$id_cible);
+        }
+        else{
+          $select = Update_UserSelection($research,$id_source);
+        }
+      }
+      elseif ($research==NULL) {
+        if ($var==0){
+          $select = SelectUser($id_cible);
+        }
+        else{
+          $select = SelectUser($id_source);
+        }
+      }
+      return $select;
+    }
+
+    function Test_my_id($MyId,$id_source,$id_cible)
+    {
+      if ($MyId==$id_cible){
+        $var=1;
+      }
+      elseif($MyId==$id_source){
+        $var=0;
+      }
+      return $var;
+    }
+
+    function CloseTransaction($id_transaction,$Close_date,$Close_message,$Close_statue)
+    {
+      $log = false;
       $bdd = connectDatabase($log);
-      $request = "UPDATE `transaction` SET date_de_fermeture='$Close_date', message_cloture='$Close_message',statut='Fermee' WHERE `transaction`.`id_transaction` = $id_transaction";
+      $request = "UPDATE `transaction` SET date_de_fermeture='$Close_date', message_cloture='$Close_message',statut='$Close_statue' WHERE `transaction`.`id_transaction` = $id_transaction";
       $result = executeRequest($bdd,$request,$log);
       $bdd->close();
     }
 
-    function getMyTransactions($myId,$order,$statue, $log=false)
+    function ModifTransaction($id_transaction,$NewMessage,$NewAmount)
+    {
+      $log=false;
+      $bdd = connectDatabase($log);
+      $request = "UPDATE `transaction` SET montant='$NewAmount', message='$NewMessage' WHERE `transaction`.`id_transaction` = $id_transaction";
+      $result = executeRequest($bdd,$request,$log);
+      $bdd->close();
+    }
+
+    function getMyTransactions($myId,$order,$statue,$Debt_Receivables, $log=false)
     {
       $bdd = connectDatabase($log);
       //SQL request to create user table
@@ -45,30 +87,42 @@
       elseif ($order == 2){
         $asc="desc";
       }
+      if ($Debt_Receivables == 1){
+        $choose = "(id_utilisateur_source='$myId')
+        Or
+          (id_utilisateur_cible='$myId'))";
+      }
+      elseif ($Debt_Receivables == 2){
+        $choose = "(id_utilisateur_cible='$myId'))";
+      }
+      elseif ($Debt_Receivables == 3){
+        $choose = "(id_utilisateur_source='$myId'))";
+      }
       switch ($statue){
-        case 3 :
+        case 4 :
           $select = "SELECT * FROM transaction WHERE (
-            (id_utilisateur_source='$myId')
-          Or
-            (id_utilisateur_cible='$myId'))
+          $choose
           order by date_et_heure_de_creation $asc";
         break;
         case 1:
           $select = "SELECT * FROM transaction WHERE ((
-            (id_utilisateur_source='$myId')
-          Or
-            (id_utilisateur_cible='$myId'))
+          $choose
           AND
-            (statut='Ouverte'))
+            (statut='Ouvert'))
           order by date_et_heure_de_creation $asc";
+        break;
+        case 3:
+          $select = "SELECT * FROM transaction WHERE ((
+            $choose
+            AND
+              (statut='Annulee'))
+            order by date_et_heure_de_creation $asc";
         break;
         case 2:
           $select = "SELECT * FROM transaction WHERE ((
-            (id_utilisateur_source='$myId')
-          Or
-            (id_utilisateur_cible='$myId'))
+          $choose
           AND
-            (statut='Fermee'))
+            (statut='Remboursee'))
           order by date_et_heure_de_creation $asc";
         break;
       }

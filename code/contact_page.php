@@ -14,9 +14,9 @@ else{
 }
 
 
-
 include("create_database.php");
 include("database_request.php");
+createTableAmitie();
 $me = getUtilisateurWithEmail($_SESSION["email"]);
 
 function filter($input){
