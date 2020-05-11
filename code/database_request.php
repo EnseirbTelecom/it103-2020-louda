@@ -13,6 +13,51 @@
       return $rows;
     }
 
+    function GetMyFriendId($friendshipId,$MyId)
+    {
+      $log = false;
+      $bdd = connectDatabase($log);
+      $select = "SELECT * FROM `amitie` WHERE (id_amitie='$friendshipId')";
+      $res = executeRequest($bdd, $select);
+      $rows = array();
+      while($row = $res->fetch_assoc()) {
+        $ind = sizeof($rows);
+        $rows += array($ind => $row);
+      }
+      foreach ($rows as $id){
+        if ($id['id_utilisateur_1']==$MyId){
+          return $id['id_utilisateur_2'];
+        }
+        elseif ($id['id_utilisateur_2']==$MyId){
+          return $id['id_utilisateur_1'];
+        }
+      }      
+    }
+
+    function BalanceCalculation($MyId,$friendId)
+    {
+      $log = false;
+      $bdd = connectDatabase($log);
+      $select = "SELECT * FROM `transaction` WHERE ((id_utilisateur_source='$MyId' AND id_utilisateur_cible='$friendId') OR (id_utilisateur_cible='$MyId' AND id_utilisateur_source='$friendId'))";
+      $res = executeRequest($bdd, $select);
+      $rows = array();
+      while($row = $res->fetch_assoc()) {
+        $ind = sizeof($rows);
+        $rows += array($ind => $row);
+      }
+      $balance = 0;
+      foreach ($rows as $TransacBalance){
+        $var = Test_my_id($MyId,$TransacBalance['id_utilisateur_source'],$TransacBalance['id_utilisateur_cible']);
+        if ($var==1){
+          $balance = $balance - $TransacBalance['montant'];
+        }
+        elseif($var==0){
+          $balance = $balance + $TransacBalance['montant'];
+        }
+      }
+      return $balance;
+    }
+
     function SelectUser($id,$log=false)
     {
       $bdd = connectDatabase($log);

@@ -19,6 +19,7 @@ include("database_request.php");
 createTableAmitie();
 $me = getUtilisateurWithEmail($_SESSION["email"]);
 
+
 function filter($input){
   $taille = sizeof($input);
   if (isset($_POST['search'])){
@@ -64,9 +65,16 @@ if(isset($_POST['submit']))
   }
   if ($_POST['submit']=="Supprimer"){
     if(isset($_POST['selected']))
-    {
-      supprimerAmi($_POST['selected']);
-      header("location: contact_page.php");
+    {   
+      $MyFriendId=GetMyFriendId($_POST['selected'],$me['id_utilisateur']);
+      $balance = BalanceCalculation($me['id_utilisateur'],$MyFriendId);
+      if ($balance==0){
+        supprimerAmi($_POST['selected']);
+        header("location: contact_page.php");
+      }
+      else {
+        $error="Le solde avec cet amis doit etre nul !";
+      }
     }
   }
 }
@@ -157,7 +165,7 @@ if(isset($_POST['submit']))
           $row = 0;
           while($row < $size) {
             $ami = $output[$row];
-            echo "<li class=\"list-group-item\"> - users: " . $ami['prenom']. " : " . $ami["nom"];
+            echo "<li class=\"list-group-item\"> -" . $ami['prenom']. " " . $ami["nom"]. " (".$ami['pseudo']."), " .$ami['email'];
             if($search == "active"){
               echo "<br><form method=\"post\" action=\"contact_page.php?selection=search\"><input type=\"hidden\" value=".$ami['id_utilisateur']." name=\"selected\"><input type=\"submit\" value=\"Ajouter\" name=\"submit\"></form></li>";
             }else{

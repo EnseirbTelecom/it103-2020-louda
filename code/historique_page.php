@@ -240,7 +240,6 @@ else{
                         </div>
                         <div class="modal-footer">
                           <input type="hidden" value="<?php echo $transaction['id_transaction']?>" name="id_transaction">
-                        
                           <input type="submit" class="btn btn-success" value="Modifier la transaction">
                         </div>
                         </form>
