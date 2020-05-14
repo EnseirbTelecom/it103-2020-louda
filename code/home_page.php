@@ -12,6 +12,27 @@ else{
     $_SESSION['last_time']=time();
   }
 }
+include("create_database.php");
+include("database_request.php");
+createTableAmitie();
+$me = getUtilisateurWithEmail($_SESSION["email"]);
+
+
+$CloseMessage = $_POST['message_text'];
+$CloseDate = $_POST['today_date'];
+$CloseStatue = $_POST['Close_reason'];
+$myFriend = $_POST['my_friend'];
+
+if (!empty($CloseDate) && !empty($CloseMessage)){
+  $alltransactions = getTransactionWith($me['id_utilisateur'],$myFriend);
+  foreach ($alltransactions as $transaction) {
+    $t_id = $transaction['id_transaction'];
+    $checked = $_POST["transaction_".$transaction['id_transaction']];
+    if ($checked)
+      CloseTransaction($t_id,$CloseDate,$CloseMessage,$CloseStatue);
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -31,12 +52,123 @@ else{
                   <div class= "col"> <a href ='create_transaction_page.php'> Nouvelle transaction</a></div>
                   <div class= "col"> <a href ='historique_page.php'> Historique</a></div>
               </div>
-          </div> 
-          <a class="btn btn-outline-primary" id="signin" href="déconnexion_page.php">Déconnexion</a>
+          </div>
+          <a class="btn btn-outline-primary" id="signin" href="déconnexion.php">Déconnexion</a>
   </div>
-  
-<?php
+  <div class="row">
+    <div class="col">
+      <div class="container-fluid">
+          <h1>Dettes</h1>
+          <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th>Prénom
+                      <div class="col">
+                        <input class="form-control" id="search" name="search" type="search" placeholder="Search" aria-label="Search"  value="<?php echo $_POST['search'];?>">
+                      </div>
+                </th>
 
+                <th> Montant </th>
+                <th> Actions </th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              include("close_popup.php");
+              $dette = 0;
+              $allfriends = getAllFriends($me['id_utilisateur']);
+              foreach ( $allfriends as $friend ) {
+                $solde = BalanceCalculation($me['id_utilisateur'],$friend['id_utilisateur']);
+
+                if ($solde < 0){
+                 echo "<tr><td>".$friend['prenom']." ".$friend['nom']."</td>";
+                 echo "<td>".$solde."</td>";
+                 echo "<td><button type=\"button\" class=\"btn btn-danger\" data-toggle=\"modal\" data-target=\"#u_".$friend['id_utilisateur']."\">Fermer</button>";
+
+                 createPopup($me,$friend);
+
+                 echo "<button type=\"button\" class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#u_a_".$friend['id_utilisateur']."\">Tout fermer</button>";
+                 createPopup($me,$friend,true);
+                 echo "</td></tr>";
+                 $dette += $solde;
+                }
+              }
+
+              ?>
+            </tbody>
+          </table>
+          </form>
+    </div>
+  </div>
+  <div class="col">
+    <div class="container-fluid">
+        <h1>Créances</h1>
+        <table class="table">
+          <thead class="thead-light">
+            <tr>
+              <th>Prénom
+                    <div class="col">
+                      <input class="form-control" id="search" name="search" type="search" placeholder="Search" aria-label="Search"  value="<?php echo $_POST['search'];?>">
+                    </div>
+              </th>
+
+              <th> Montant </th>
+              <th> Actions </th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            $credit = 0;
+            foreach ( $allfriends as $friend ) {
+              $solde = BalanceCalculation($me['id_utilisateur'],$friend['id_utilisateur']);
+
+              if ($solde > 0){
+               echo "<tr><td>".$friend['prenom']." ".$friend['nom']."</td>";
+               echo "<td>".$solde."</td>";
+               echo "<td><button type=\"button\" class=\"btn btn-danger\" data-toggle=\"modal\" data-target=\"#u_".$friend['id_utilisateur']."\">Fermer</button>";
+               createPopup($me,$friend);
+               echo "<button type=\"button\" class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#u_a_".$friend['id_utilisateur']."\">Tout fermer</button>";
+               createPopup($me,$friend,true);
+               echo "</td></tr>";
+               $credit += $solde;
+              }
+            }
+
+            ?>
+          </tbody>
+        </table>
+        </form>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="container-fluid">
+    <h1>Total</h1>
+    <table class="table">
+      <thead class="thead-light">
+        <tr>
+          <th> Dettes </th>
+          <th> Créances </th>
+          <th> Total </th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+          $total = $dette +$credit;
+          echo "<td style=\"color:rgb(255,0,0);\">".$dette."</td>";
+          echo "<td style=\"color:rgb(0,125,0);\">".$credit."</td>";
+          if ($total < 0)
+            echo "<td style=\"color:rgb(255,0,0);\">".$total."</td>";
+          else
+            echo "<td style=\"color:rgb(0,125,0);\">".$total."</td>";
+        ?>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<?php
 if(isset($_GET['erreur'])){
   $err = $_GET['erreur'];
   if($err = 1){

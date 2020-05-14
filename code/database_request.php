@@ -13,9 +13,9 @@
       return $rows;
     }
 
-    function GetMyFriendId($friendshipId,$MyId)
+    function GetMyFriendId($friendshipId,$MyId,$log = false)
     {
-      $log = false;
+
       $bdd = connectDatabase($log);
       $select = "SELECT * FROM `amitie` WHERE (id_amitie='$friendshipId')";
       $res = executeRequest($bdd, $select);
@@ -31,14 +31,13 @@
         elseif ($id['id_utilisateur_2']==$MyId){
           return $id['id_utilisateur_1'];
         }
-      }      
+      }
     }
 
-    function BalanceCalculation($MyId,$friendId)
+    function BalanceCalculation($MyId,$friendId,$log = false)
     {
-      $log = false;
       $bdd = connectDatabase($log);
-      $select = "SELECT * FROM `transaction` WHERE ((id_utilisateur_source='$MyId' AND id_utilisateur_cible='$friendId') OR (id_utilisateur_cible='$MyId' AND id_utilisateur_source='$friendId'))";
+      $select = "SELECT * FROM `transaction` WHERE ((id_utilisateur_source='$MyId' AND id_utilisateur_cible='$friendId' AND statut='Ouvert') OR (id_utilisateur_cible='$MyId' AND id_utilisateur_source='$friendId' AND statut='Ouvert'))";
       $res = executeRequest($bdd, $select);
       $rows = array();
       while($row = $res->fetch_assoc()) {
@@ -70,7 +69,7 @@
       }
       return $rows;
     }
-    
+
     // La fonction fonctionne mais je n'arrive pas à l'utiliser comme je souhaite
     function Select_correct_user($research,$id_source,$id_cible,$var)
     {
@@ -191,9 +190,9 @@
       $bdd = connectDatabase($log);
       //SQL request to create user table
       $select = "SELECT * FROM transaction WHERE (
-        (id_utilisateur_source='$myId' AND id_utilisateur_cible='$friendId')
+        (id_utilisateur_source='$myId' AND id_utilisateur_cible='$friendId' AND statut='Ouvert')
         Or
-        (id_utilisateur_source='$friendId' AND id_utilisateur_cible='$myId'))";
+        (id_utilisateur_source='$friendId' AND id_utilisateur_cible='$myId' AND statut='Ouvert'))";
 
       $result = executeRequest($bdd,$select,$log);
       $rows = array();
