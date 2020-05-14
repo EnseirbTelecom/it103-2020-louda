@@ -46,7 +46,7 @@ createTableAmitie();
                   <div class= "col"> <a href ='historique_page.php'> Historique</a></div>
               </div>
           </div> 
-          <a class="btn btn-outline-primary" id="signin" href="déconnexion_page.php">Déconnexion</a>
+          <a class="btn btn-outline-primary" id="signin" href="déconnexion.php">Déconnexion</a>
     </div>
     <div class="container">
         <div class="header offset-md-3">
