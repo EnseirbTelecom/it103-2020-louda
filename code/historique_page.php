@@ -7,8 +7,8 @@ include("database_request.php");
 include("create_database.php");
 
 $me = getUtilisateurWithEmail($_SESSION["email"]);
-if (!empty($_POST['search'])) { 
-  $s = $_POST['search']; 
+if (!empty($_POST['search'])) {
+  $s = $_POST['search'];
 }
 else {
   $s = NULL;
@@ -72,7 +72,7 @@ else{
                 <div class= "col"> <a href ='create_transaction_page.php'> Nouvelle transaction</a></div>
                 <div class= "col"> <a class="col-sm bg-primary text-white rounded text-center" href ='historique_page.php'> Historique</a></div>
             </div>
-        </div> 
+        </div>
         <a class="btn btn-outline-primary" id="signin" href="déconnexion.php">Déconnexion</a>
 </div>
   <div class="container-fluid">
@@ -92,7 +92,7 @@ else{
                   <select name="Account" class="browser-default custom-select">
                     <option value="1" <?php if( $Debt_selection == "1") {echo "selected";} ?>>Dettes et créances</option>
                     <option value="2" <?php if( $Debt_selection == "2") {echo "selected";} ?>>Dettes</option>
-                    <option value="3" <?php if( $Debt_selection == "3") {echo "selected";} ?>>Créances</option> 
+                    <option value="3" <?php if( $Debt_selection == "3") {echo "selected";} ?>>Créances</option>
                   </select>
                 </div>
               </th>
@@ -113,7 +113,7 @@ else{
                     <option value="1" <?php if( $SelectedValue == "1") {echo "selected";} ?>>Ouvert</option>
                     <option value="2"<?php if( $SelectedValue == "2") {echo "selected";} ?>>Remboursée</option>
                     <option value="3"<?php if( $SelectedValue == "3") {echo "selected";} ?>>Annulée</option>
-                    <option value="4" <?php if( $SelectedValue == "4") {echo "selected";} ?>>Toute</option> 
+                    <option value="4" <?php if( $SelectedValue == "4") {echo "selected";} ?>>Toute</option>
                   </select>
                 </div>
               </th>
@@ -124,11 +124,14 @@ else{
         </thead>
         <tbody>
           <?php
+          $open_date = "2";
+          $statue = "1";
+          $Debt_Receivables = "1";
               if(isset($_POST['Open_date']) && isset($_POST['statue']) && isset($_POST['statue'])) {
                 $open_date = ceil($_POST['Open_date']);
                 $statue = ceil($_POST['statue']);
                 $Debt_Receivables = ceil($_POST['Account']);
-              } 
+              }
               $alltransaction = getMyTransactions($me['id_utilisateur'],$open_date,$statue,$Debt_Receivables);
               foreach ( $alltransaction as $transaction ) {
                 $var=Test_my_id($me['id_utilisateur'],$transaction['id_utilisateur_source'],$transaction['id_utilisateur_cible']);
@@ -146,7 +149,7 @@ else{
                     $rows = SelectUser($transaction['id_utilisateur_cible']);
                   }
                   else {
-                   
+
                     $rows = Update_UserSelection($s,$transaction['id_utilisateur_cible']);
                   }
                 }
@@ -246,13 +249,16 @@ else{
                       </div>
                     </div>
                   </div>
-                  <?php } ?> </td>
+                  <?php }
+                  else{
+                    echo "<p>".$transaction['message_cloture']."</p>";
+                  } ?> </td>
               </tr>
           <?php } } ?>
         </tbody>
       </table>
       </form>
- 
+
 
 
 

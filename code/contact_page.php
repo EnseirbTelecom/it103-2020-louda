@@ -27,7 +27,7 @@ function filter($input){
     $filtered = array();
     $search = $_POST['search'];
     for ($i = 0; $i < $taille; $i++){
-      if ((stripos($input[$i]['nom'],$search) !== false)||(stripos($input[$i]['prenom'],$search) !== false)||(stripos($input[$i]['pseudo'],$search) !== false)){
+      if ((stripos($input[$i]['nom'],$search) !== false)||(stripos($input[$i]['prenom'],$search) !== false)||(stripos($input[$i]['pseudo'],$search) !== false)||(stripos($input[$i]['email'],$search) !== false)){
         $ind = sizeof($filtered);
         $filtered += array($ind => $input[$i]);
       }
@@ -65,7 +65,7 @@ if(isset($_POST['submit']))
   }
   if ($_POST['submit']=="Supprimer"){
     if(isset($_POST['selected']))
-    {   
+    {
       $MyFriendId=GetMyFriendId($_POST['selected'],$me['id_utilisateur']);
       $balance = BalanceCalculation($me['id_utilisateur'],$MyFriendId);
       if ($balance==0){
@@ -98,7 +98,7 @@ if(isset($_POST['submit']))
                 <div class= "col"> <a href ='create_transaction_page.php'> Nouvelle transaction</a></div>
                 <div class= "col"> <a href ='historique_page.php'> Historique</a></div>
             </div>
-        </div> 
+        </div>
         <a class="btn btn-outline-primary" id="signin" href="déconnexion.php">Déconnexion</a>
   </div>
   <div class="container">
@@ -169,7 +169,17 @@ if(isset($_POST['submit']))
             if($search == "active"){
               echo "<br><form method=\"post\" action=\"contact_page.php?selection=search\"><input type=\"hidden\" value=".$ami['id_utilisateur']." name=\"selected\"><input type=\"submit\" value=\"Ajouter\" name=\"submit\"></form></li>";
             }else{
-              echo "<br><form method=\"post\" action=\"contact_page.php\"><input type=\"hidden\" value=".$ami['id_amitie']." name=\"selected\"><input type=\"submit\" value=\"Supprimer\" name=\"submit\"></form></li>";
+
+              $solde = BalanceCalculation($me['id_utilisateur'],$ami['id_utilisateur']);
+
+              if ($solde ==0){
+                echo "<p style=\"color:rgb(0,125,0);\">solde : ".$solde."</p>";
+                echo "<br><form method=\"post\" action=\"contact_page.php\"><input type=\"hidden\" value=".$ami['id_amitie']." name=\"selected\"><input type=\"submit\" value=\"Supprimer\" name=\"submit\"></form></li>";
+              }
+              else{
+                echo "<p style=\"color:rgb(255,0,0);\">solde : ".$solde."</p>";
+                echo "<br><form method=\"post\" action=\"contact_page.php\"><input type=\"hidden\" value=".$ami['id_amitie']." name=\"selected\"><input type=\"submit\" value=\"Supprimer\" name=\"submit\" disabled></form></li>";
+              }
             }
             $row++;
           }
