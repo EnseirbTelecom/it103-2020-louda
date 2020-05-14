@@ -14,6 +14,7 @@ else{
 }
 include("create_database.php");
 include("database_request.php");
+include("signout_popup.php");
 createTableAmitie();
 $me = getUtilisateurWithEmail($_SESSION["email"]);
 
@@ -39,26 +40,30 @@ if (!empty($CloseDate) && !empty($CloseMessage)){
 <html lang ="fr">
   <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="Louda.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>Page d'accueil </title>
   </head>
 <body>
   <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white">
-          <h1 class="my-0 mr-md-auto font-weight-normal">Titre du site</h1>
+          <h1 class="my-0 mr-md-auto font-weight-normal">Louda</h1>
           <div class="container">
               <div class="row ">
-                  <div class= "col"> <a class="col-sm bg-primary text-white rounded text-center" href ='home_page.php'> Home</a></div>
-                  <div class= "col"> <a href ='contact_page.php'> Carnet d'amis</a></div>
-                  <div class= "col"> <a href ='create_transaction_page.php'> Nouvelle transaction</a></div>
-                  <div class= "col"> <a href ='historique_page.php'> Historique</a></div>
+                  <div class= "col"> <a id="navbarBg" class="col-sm bg rounded text-center" href ='home_page.php'>Accueil</a></div>
+                  <div class= "col"> <a id="navbar" href ='contact_page.php'> Carnet d'amis</a></div>
+                  <div class= "col"> <a id="navbar" href ='create_transaction_page.php'> Nouvelle transaction</a></div>
+                  <div class= "col"> <a id="navbar" href ='historique_page.php'> Mes transactions</a></div>
               </div>
           </div>
-          <a class="btn btn-outline-primary" id="signin" href="déconnexion.php">Déconnexion</a>
+          <button id="signout" data-toggle="modal" data-target="#SignOut" href="déconnexion.php">
+            <img id="signoutpng" src="deconnexion.png" alt="..." class="rounded">
+          </button>
+          <?php CreateSignoutPopup(); ?>
   </div>
   <div class="row">
     <div class="col">
       <div class="container-fluid">
-          <h1>Dettes</h1>
+          <h2>Dettes</h2>
           <table class="table">
             <thead class="thead-light">
               <tr>
@@ -81,8 +86,8 @@ if (!empty($CloseDate) && !empty($CloseMessage)){
                 $solde = BalanceCalculation($me['id_utilisateur'],$friend['id_utilisateur']);
 
                 if ($solde < 0){
-                 echo "<tr><td>".$friend['prenom']." ".$friend['nom']."</td>";
-                 echo "<td>".$solde."</td>";
+                 echo "<tr><td>"; ?> <a id="friendColor" href="historique_page.php?selection=<?php echo $friend['nom'] ?>"><?php echo $friend['prenom']." ".$friend['nom']."</a></td>";
+                 echo "<td>".$solde."€</td>";
                  echo "<td><button type=\"button\" class=\"btn btn-danger\" data-toggle=\"modal\" data-target=\"#u_".$friend['id_utilisateur']."\">Fermer</button>";
 
                  createPopup($me,$friend);
@@ -102,7 +107,7 @@ if (!empty($CloseDate) && !empty($CloseMessage)){
   </div>
   <div class="col">
     <div class="container-fluid">
-        <h1>Créances</h1>
+        <h2>Créances</h2>
         <table class="table">
           <thead class="thead-light">
             <tr>
@@ -123,8 +128,8 @@ if (!empty($CloseDate) && !empty($CloseMessage)){
               $solde = BalanceCalculation($me['id_utilisateur'],$friend['id_utilisateur']);
 
               if ($solde > 0){
-               echo "<tr><td>".$friend['prenom']." ".$friend['nom']."</td>";
-               echo "<td>".$solde."</td>";
+               echo "<tr><td>"; ?> <a id="friendColor" href="historique_page.php?selection=<?php echo $friend['nom'] ?>"><?php echo $friend['prenom']." ".$friend['nom']."</a></td>";
+               echo "<td>".$solde."€</td>";
                echo "<td><button type=\"button\" class=\"btn btn-danger\" data-toggle=\"modal\" data-target=\"#u_".$friend['id_utilisateur']."\">Fermer</button>";
                createPopup($me,$friend);
                echo "<button type=\"button\" class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#u_a_".$friend['id_utilisateur']."\">Tout fermer</button>";
@@ -143,7 +148,7 @@ if (!empty($CloseDate) && !empty($CloseMessage)){
 </div>
 <div class="row">
   <div class="container-fluid">
-    <h1>Total</h1>
+    <h2>Total</h2>
     <table class="table">
       <thead class="thead-light">
         <tr>
@@ -155,12 +160,12 @@ if (!empty($CloseDate) && !empty($CloseMessage)){
       <tbody>
         <?php
           $total = $dette +$credit;
-          echo "<td style=\"color:rgb(255,0,0);\">".$dette."</td>";
-          echo "<td style=\"color:rgb(0,125,0);\">".$credit."</td>";
+          echo "<td id=\"red\">".$dette."€</td>";
+          echo "<td id=\"green\" >".$credit."€</td>";
           if ($total < 0)
-            echo "<td style=\"color:rgb(255,0,0);\">".$total."</td>";
+            echo "<td id=\"red\">".$total."€</td>";
           else
-            echo "<td style=\"color:rgb(0,125,0);\">".$total."</td>";
+            echo "<td id=\"green\" >".$total."€</td>";
         ?>
       </tbody>
     </table>

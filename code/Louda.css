@@ -1,0 +1,40 @@
+div.modal-footer {
+    text-align: center;
+  }
+
+.alert{
+    height:70%;
+}
+
+#red{
+  color:red;
+}
+
+#green{
+  color:green;
+}
+
+#solde{
+  color:rgb(139,0,139);
+}
+
+#friendColor{
+  color:rgb(0, 97, 194);
+}
+
+#navbar{
+  font-size:large;
+  font-weight:bold;
+  color:rgb(0,0,0);
+}
+
+#navbarBg{
+  color:rgb(0,0,0);
+  font-weight:bold;
+  background-color: rgba(119, 136, 153,0.5);
+}
+
+#signoutpng{
+  width: 40px;
+  height: 40px;
+}

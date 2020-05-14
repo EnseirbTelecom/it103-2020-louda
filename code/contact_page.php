@@ -16,6 +16,7 @@ else{
 
 include("create_database.php");
 include("database_request.php");
+include("signout_popup.php");
 createTableAmitie();
 $me = getUtilisateurWithEmail($_SESSION["email"]);
 
@@ -87,19 +88,23 @@ if(isset($_POST['submit']))
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>Contacts</title>
+    <link rel="stylesheet" href="Louda.css">
   </head>
   <body>
   <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white">
-        <h1 class="my-0 mr-md-auto font-weight-normal">Titre du site</h1>
+        <h1 class="my-0 mr-md-auto font-weight-normal">Louda</h1>
         <div class="container">
             <div class="row ">
-                <div class= "col"> <a href ='home_page.php'> Home</a></div>
-                <div class= "col"> <a class="col-sm bg-primary text-white rounded text-center" href ='contact_page.php'> Carnet d'amis</a></div>
-                <div class= "col"> <a href ='create_transaction_page.php'> Nouvelle transaction</a></div>
-                <div class= "col"> <a href ='historique_page.php'> Historique</a></div>
+                <div class= "col"> <a id="navbar" href ='home_page.php'>Accueil</a></div>
+                <div class= "col"> <a id="navbarBg" class="col-sm bg rounded text-center" href ='contact_page.php'> Carnet d'amis</a></div>
+                <div class= "col"> <a id="navbar" href ='create_transaction_page.php'> Nouvelle transaction</a></div>
+                <div class= "col"> <a id="navbar" href ='historique_page.php'> Mes transactions</a></div>
             </div>
         </div>
-        <a class="btn btn-outline-primary" id="signin" href="déconnexion.php">Déconnexion</a>
+        <button id="signout" data-toggle="modal" data-target="#SignOut" href="déconnexion.php">
+          <img id="signoutpng" src="deconnexion.png" alt="..." class="rounded">
+        </button>
+        <?php CreateSignoutPopup(); ?>
   </div>
   <div class="container">
     <div class="row">
@@ -165,7 +170,8 @@ if(isset($_POST['submit']))
           $row = 0;
           while($row < $size) {
             $ami = $output[$row];
-            echo "<li class=\"list-group-item\"> -" . $ami['prenom']. " " . $ami["nom"]. " (".$ami['pseudo']."), " .$ami['email'];
+            ?>
+            <li class="list-group-item border border-secondary" > - <a href="historique_page.php?selection=<?php echo $ami['nom'] ?>" id="friendColor"><?php echo $ami['prenom']. " " . $ami['nom']. "</a> (".$ami['pseudo']."), " .$ami['email'];
             if($search == "active"){
               echo "<br><form method=\"post\" action=\"contact_page.php?selection=search\"><input type=\"hidden\" value=".$ami['id_utilisateur']." name=\"selected\"><input type=\"submit\" value=\"Ajouter\" name=\"submit\"></form></li>";
             }else{
@@ -173,18 +179,18 @@ if(isset($_POST['submit']))
               $solde = BalanceCalculation($me['id_utilisateur'],$ami['id_utilisateur']);
 
               if ($solde ==0){
-                echo "<p style=\"color:rgb(0,125,0);\">solde : ".$solde."</p>";
+                echo "<br> <br> <h3 id=\"solde\" class=\" mx-auto col-sm-5 border border-dark\">Solde : ".$solde."€</h3>";
                 echo "<br><form method=\"post\" action=\"contact_page.php\"><input type=\"hidden\" value=".$ami['id_amitie']." name=\"selected\"><input type=\"submit\" value=\"Supprimer\" name=\"submit\"></form></li>";
               }
               else{
-                echo "<p style=\"color:rgb(255,0,0);\">solde : ".$solde."</p>";
+                echo "<br> <br> <h3 class=\"col-sm-5 mx-auto border border-dark\" id=\"solde\">Solde : ".$solde."€</h3>";
                 echo "<br><form method=\"post\" action=\"contact_page.php\"><input type=\"hidden\" value=".$ami['id_amitie']." name=\"selected\"><input type=\"submit\" value=\"Supprimer\" name=\"submit\" disabled></form></li>";
               }
             }
             $row++;
           }
         }
-        else{echo "<li>pas d'amis</li>";}
+        else{echo "<li>Pas de nouveaux amis disponibles</li>";}
         echo "</ul>";
         ?>
       </div>

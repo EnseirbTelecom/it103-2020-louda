@@ -16,7 +16,7 @@ else{
     $_SESSION['last_time']=time();
   }
 }
-
+include("signout_popup.php");
 include("create_database.php");
 createDatabase();
 createTableUtilisateur();
@@ -32,21 +32,25 @@ createTableAmitie();
 <head>
   <meta charset="utf-8">
   <title> Transaction </title>
+  <link rel="stylesheet" href="Louda.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 
   <body>
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white">
-          <h1 class="my-0 mr-md-auto font-weight-normal">Titre du site</h1>
+          <h1 class="my-0 mr-md-auto font-weight-normal">Louda</h1>
           <div class="container">
               <div class="row ">
-                  <div class= "col"> <a href ='home_page.php'> Home</a></div>
-                  <div class= "col"> <a href ='contact_page.php'> Carnet d'amis</a></div>
-                  <div class= "col"> <a class="col-sm bg-primary text-white rounded text-center" href ='create_transaction_page.php'> Nouvelle transaction</a></div>
-                  <div class= "col"> <a href ='historique_page.php'> Historique</a></div>
+                  <div class= "col"> <a id="navbar" href ='home_page.php'>Accueil</a></div>
+                  <div class= "col"> <a id="navbar" href ='contact_page.php'> Carnet d'amis</a></div>
+                  <div class= "col"> <a id="navbarBg" class="col-sm bg rounded text-center" href ='create_transaction_page.php'> Nouvelle transaction</a></div>
+                  <div class= "col"> <a id="navbar" href ='historique_page.php'> Mes transactions</a></div>
               </div>
           </div> 
-          <a class="btn btn-outline-primary" id="signin" href="déconnexion.php">Déconnexion</a>
+          <button id="signout" data-toggle="modal" data-target="#SignOut" href="déconnexion.php">
+            <img id="signoutpng" src="deconnexion.png" alt="..." class="rounded">
+          </button>
+          <?php CreateSignoutPopup(); ?>
     </div>
     <div class="container">
         <div class="header offset-md-3">

@@ -5,8 +5,10 @@ if (empty($_SESSION)){
 }
 include("database_request.php");
 include("create_database.php");
+include("signout_popup.php");
 
 $me = getUtilisateurWithEmail($_SESSION["email"]);
+
 if (!empty($_POST['search'])) {
   $s = $_POST['search'];
 }
@@ -17,9 +19,7 @@ else {
 $search="";
 
 if (isset($_GET['selection'])){
-  if ($_GET['selection']=='search'){
-    $search="active";
-  }
+  $s = $_GET['selection'];
 }
 
 //$DateSelected = isset( $_GET['Open_date'] ) ? $_GET['Open_date'] : "" ;
@@ -60,20 +60,23 @@ else{
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>Historique </title>
-    <link rel="stylesheet" href="historique.css">
+    <link rel="stylesheet" href="Louda.css">
   </head>
 <body>
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white">
-        <h1 class="my-0 mr-md-auto font-weight-normal">Titre du site</h1>
-        <div class="container">
+        <h1 class="my-0 mr-md-auto font-weight-normal">Louda</h1>
+        <div id="green" class="container">
             <div class="row ">
-                <div class= "col"> <a href ='home_page.php'> Home</a></div>
-                <div class= "col"> <a href ='contact_page.php'> Carnet d'amis</a></div>
-                <div class= "col"> <a href ='create_transaction_page.php'> Nouvelle transaction</a></div>
-                <div class= "col"> <a class="col-sm bg-primary text-white rounded text-center" href ='historique_page.php'> Historique</a></div>
+                <div class= "col"> <a id="navbar" href ='home_page.php'>Accueil</a></div>
+                <div class= "col"> <a id="navbar" href ='contact_page.php'> Carnet d'amis</a></div>
+                <div class= "col"> <a id="navbar" href ='create_transaction_page.php'> Nouvelle transaction</a></div>
+                <div class= "col"> <a id="navbarBg" class="col-sm bg rounded text-center" href ='historique_page.php'> Mes transactions </a></div>
             </div>
         </div>
-        <a class="btn btn-outline-primary" id="signin" href="déconnexion.php">Déconnexion</a>
+        <button id="signout" data-toggle="modal" data-target="#SignOut" href="déconnexion.php">
+          <img id="signoutpng" src="deconnexion.png" alt="..." class="rounded">
+        </button>
+        <?php CreateSignoutPopup(); ?>
 </div>
   <div class="container-fluid">
       <h1>Historique</h1>
@@ -158,7 +161,7 @@ else{
               <tr <?php if ($transaction['statut']!='Ouvert') { ?> class="table-secondary" <?php }?> >
                 <td><?php echo $user['prenom']." ".$user['nom']; ?></td>
                 <td><?php echo $transaction['nom_de_la_transaction'];?></td>
-                <td <?php if ($var==1){echo 'style="color:red;"';?>><?php echo "- ".$transaction['montant']; ?><?php } elseif ($var==0) {echo 'style="color:green;"';?>><?php echo "+ ".$transaction['montant'];} ?></td>
+                <td <?php if ($var==1){echo 'id="red"';?>><?php echo "- ".$transaction['montant']; ?><?php } elseif ($var==0) {echo 'id="green"';?>><?php echo "+ ".$transaction['montant'];} ?></td>
                 <td><?php echo $transaction['message']; ?></td>
                 <td><?php echo $transaction['date_et_heure_de_creation']; ?></td>
                 <td><?php echo $transaction['date_de_fermeture']; ?></td>
@@ -190,29 +193,29 @@ else{
                               </div>
                               <fieldset class="form-group row offset-md-1">
                                   <div class="row">
-                                  <legend class="col-form-label col-md-3 pt-0">Statut de fermeture</legend>
-                                  <div class="col-sm-10">
-                                      <div class="form-check">
-                                      <input class="form-check-input" type="radio" name="Close_reason" id="Close_reason1" value="Remboursee" checked>
-                                      <label class="form-check-label" for="Close_reason1">
-                                          Remboursement
-                                      </label>
-                                      </div>
-                                      <div class="form-check">
-                                          <input class="form-check-input" type="radio" name="Close_reason" id="Close_reason2" value="Annulee">
-                                          <label class="form-check-label" for="Close_reason2">
-                                          Annulation
-                                          </label>
-                                      </div>
-                                  </div>
+                                    <legend class="col-form-label col-md-3 pt-0">Statut de fermeture</legend>
+                                    <div class="col-sm-10">
+                                        <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="Close_reason" id="Close_reason1" value="Remboursee" checked>
+                                        <label class="form-check-label" for="Close_reason1">
+                                            Remboursement
+                                        </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Close_reason" id="Close_reason2" value="Annulee">
+                                            <label class="form-check-label" for="Close_reason2">
+                                            Annulation
+                                            </label>
+                                        </div>
+                                    </div>
                                   </div>
                               </fieldset>
-                        </div>
-                        <div class="modal-footer">
-                          <input type="hidden" value="<?php echo $transaction['id_transaction']?>" name="id_transaction">
-                          <input type="submit" class="btn btn-success" value="Fermer la transaction">
-                        </div>
-                        </form>
+                          </div>
+                          <div class="modal-footer">
+                            <input type="hidden" value="<?php echo $transaction['id_transaction']?>" name="id_transaction">
+                            <input type="submit" class="btn btn-success" value="Fermer la transaction">
+                          </div>
+                          </form>
                       </div>
                     </div>
                   </div>
