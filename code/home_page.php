@@ -86,7 +86,7 @@ if (!empty($CloseDate) && !empty($CloseMessage)){
                 $solde = BalanceCalculation($me['id_utilisateur'],$friend['id_utilisateur']);
 
                 if ($solde < 0){
-                 echo "<tr><td>"; ?> <a id="friendColor" href="historique_page.php?selection=<?php echo $friend['nom'] ?>"><?php echo $friend['prenom']." ".$friend['nom']."</a></td>";
+                 echo "<tr><td>"; ?> <a id="friendColor" href="historique_page.php?selection=<?php echo $friend['email'] ?>"><?php echo $friend['prenom']." ".$friend['nom']."</a></td>";
                  echo "<td>".$solde."€</td>";
                  echo "<td><button type=\"button\" class=\"btn btn-danger\" data-toggle=\"modal\" data-target=\"#u_".$friend['id_utilisateur']."\">Fermer</button>";
 
@@ -128,7 +128,7 @@ if (!empty($CloseDate) && !empty($CloseMessage)){
               $solde = BalanceCalculation($me['id_utilisateur'],$friend['id_utilisateur']);
 
               if ($solde > 0){
-               echo "<tr><td>"; ?> <a id="friendColor" href="historique_page.php?selection=<?php echo $friend['nom'] ?>"><?php echo $friend['prenom']." ".$friend['nom']."</a></td>";
+               echo "<tr><td>"; ?> <a id="friendColor" href="historique_page.php?selection=<?php echo $friend['email'] ?>"><?php echo $friend['prenom']." ".$friend['nom']."</a></td>";
                echo "<td>".$solde."€</td>";
                echo "<td><button type=\"button\" class=\"btn btn-danger\" data-toggle=\"modal\" data-target=\"#u_".$friend['id_utilisateur']."\">Fermer</button>";
                createPopup($me,$friend);

@@ -171,7 +171,7 @@ if(isset($_POST['submit']))
           while($row < $size) {
             $ami = $output[$row];
             ?>
-            <li class="list-group-item border border-secondary" > - <a href="historique_page.php?selection=<?php echo $ami['nom'] ?>" id="friendColor"><?php echo $ami['prenom']. " " . $ami['nom']. "</a> (".$ami['pseudo']."), " .$ami['email'];
+            <li class="list-group-item border border-secondary" > - <a href="historique_page.php?selection=<?php echo $ami['email'] ?>" id="friendColor"><?php echo $ami['prenom']. " " . $ami['nom']. "</a> (".$ami['pseudo']."), " .$ami['email'];
             if($search == "active"){
               echo "<br><form method=\"post\" action=\"contact_page.php?selection=search\"><input type=\"hidden\" value=".$ami['id_utilisateur']." name=\"selected\"><input type=\"submit\" value=\"Ajouter\" name=\"submit\"></form></li>";
             }else{

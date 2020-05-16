@@ -1,6 +1,6 @@
 <?php
   function firstConnectDatabase($log = false){
-    $link = mysqli_connect("localhost", "admin", "it103");
+    $link = mysqli_connect("localhost", "root", "");
     if ($log){
       if (!$link) {
           die('Connexion impossible : ' . mysqli_error($link) . "<br />");
@@ -12,7 +12,7 @@
   }
 
  function connectDatabase($log = false){
-   $link = new mysqli("localhost", "admin", "it103","louda");
+   $link = new mysqli("localhost", "root", "","louda");
    if ($log){
      if (!$link) {
          die('Connexion impossible : ' . mysqli_error($link) . "<br />");
