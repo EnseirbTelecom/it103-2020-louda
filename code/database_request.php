@@ -3,7 +3,7 @@
     function Update_UserSelection($research,$id)
     {
       $bdd = connectDatabase($log);
-      $select = "SELECT * FROM `utilisateur` WHERE ((id_utilisateur='$id') AND ((`prenom` LIKE '{$research}')  OR (`nom` LIKE '{$research}') OR (`pseudo` LIKE '{$research}'))) ";
+      $select = "SELECT * FROM `utilisateur` WHERE ((id_utilisateur='$id') AND ((`prenom` LIKE '{$research}') OR (`email` LIKE '{$research}') OR (`nom` LIKE '{$research}') OR (`pseudo` LIKE '{$research}'))) ";
       $res = executeRequest($bdd, $select);
       $rows = array();
       while($row = $res->fetch_assoc()) {
