@@ -33,6 +33,31 @@ if (!empty($CloseDate) && !empty($CloseMessage)){
       CloseTransaction($t_id,$CloseDate,$CloseMessage,$CloseStatue);
     }
 }
+function  trierFriend($me,$FRIENDS){
+  $output = array();
+  $ind = 0;
+  foreach ( $FRIENDS as $friend){
+    $encours = BalanceCalculation($me['id_utilisateur'],$friend['id_utilisateur']);
+    $friend += array('solde' => $encours);
+    $output += array($ind => $friend);
+    $ind++;
+    #echo $encours."</br>";
+  }
+  #afficher($output);
+  $orderby = "solde"; //change this to whatever key you want from the array
+
+  array_multisort(array_column($output,'solde'),SORT_ASC,$output);
+  #echo "</br></br>";
+  return $output;
+}
+
+
+
+function afficher($input){
+  foreach ($input as $key) {
+    echo $key["solde"]."</br>";
+  }
+}
 
 ?>
 
@@ -82,6 +107,10 @@ if (!empty($CloseDate) && !empty($CloseMessage)){
               include("close_popup.php");
               $dette = 0;
               $allfriends = getAllFriends($me['id_utilisateur']);
+              $allfriends = trierFriend($me,$allfriends);
+              if (isset($_GET['selection'])){
+                $selection = $_GET['selection'];
+              }
               foreach ( $allfriends as $friend ) {
                 $solde = BalanceCalculation($me['id_utilisateur'],$friend['id_utilisateur']);
 
@@ -94,7 +123,18 @@ if (!empty($CloseDate) && !empty($CloseMessage)){
 
                  echo "<button type=\"button\" class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#u_a_".$friend['id_utilisateur']."\">Tout fermer</button>";
                  createPopup($me,$friend,true);
-                 echo "</td></tr>";
+                 if ($selection == $friend['id_utilisateur']){
+                   echo "<a  href=\"home_page.php\">  hide</a>";
+                   echo "</td></tr>";
+                   $alltransactions = getTransactionWith($me['id_utilisateur'],$friend['id_utilisateur']);
+                   foreach ($alltransactions as $transaction){
+                     echo "<tr><td>".$transaction['nom_de_la_transaction']."</td><td>".$transaction['montant']."€</td> </tr>";
+                   }
+                 }
+                 else{
+                   echo "<a  href=\"home_page.php?selection=".$friend[id_utilisateur]."\">  show</a>";
+                   echo "</td></tr>";
+                 }
                  $dette += $solde;
                 }
               }
@@ -134,7 +174,18 @@ if (!empty($CloseDate) && !empty($CloseMessage)){
                createPopup($me,$friend);
                echo "<button type=\"button\" class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#u_a_".$friend['id_utilisateur']."\">Tout fermer</button>";
                createPopup($me,$friend,true);
-               echo "</td></tr>";
+               if ($selection == $friend['id_utilisateur']){
+                 echo "<a  href=\"home_page.php\">  hide</a>";
+                 echo "</td></tr>";
+                 $alltransactions = getTransactionWith($me['id_utilisateur'],$friend['id_utilisateur']);
+                 foreach ($alltransactions as $transaction){
+                   echo "<tr><td>".$transaction['nom_de_la_transaction']."</td><td>".$transaction['montant']."€</td> </tr>";
+                 }
+               }
+               else{
+                 echo "<a  href=\"home_page.php?selection=".$friend[id_utilisateur]."\">  show</a>";
+                 echo "</td></tr>";
+               }
                $credit += $solde;
               }
             }

@@ -65,7 +65,7 @@
        nom_de_la_transaction TEXT ,
        date_et_heure_de_creation DATETIME NOT NULL,
        date_de_fermeture DATETIME,
-       montant DECIMAL,
+       montant DECIMAL(10,2),
        message_cloture TEXT,
        message TEXT,
        statut TEXT NOT NULL)";
