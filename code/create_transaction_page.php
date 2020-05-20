@@ -46,7 +46,7 @@ createTableAmitie();
                   <div class= "col"> <a id="navbarBg" class="col-sm bg rounded text-center" href ='create_transaction_page.php'> Nouvelle transaction</a></div>
                   <div class= "col"> <a id="navbar" href ='historique_page.php'> Mes transactions</a></div>
               </div>
-          </div> 
+          </div>
           <button id="signout" data-toggle="modal" data-target="#SignOut" href="déconnexion.php">
             <img id="signoutpng" src="deconnexion.png" alt="..." class="rounded">
           </button>
@@ -78,7 +78,7 @@ createTableAmitie();
               <?php
                 $req ='SELECT nom , prenom , id_utilisateur FROM utilisateur ORDER BY nom , prenom';
                 $res=mysqli_query($connexion , $req);
-                while($row = mysqli_fetch_array($res)){ 
+                while($row = mysqli_fetch_array($res)){
               ?>
             <option value="<?php echo $row['id_utilisateur']; ?> "> <?php echo $row['nom'] ?> <?php echo $row['prenom'] ;?></option>
             <?php
@@ -87,33 +87,33 @@ createTableAmitie();
            </select>
           </div>
         </div>
-        <div class="form-group row">   
+        <div class="form-group row">
           <label for="cible" class="col-sm-3 col-form-label offset-md-2"> Utilisateur cible : </label>
           <div class="col-lg-4">
             <select name="cible" id="cible" class='form-control'>
               <?php
                 $req ='SELECT nom , prenom , id_utilisateur FROM utilisateur ORDER BY nom,prenom';
                 $res=mysqli_query($connexion , $req);
-                while($row = mysqli_fetch_array($res)){ 
+                while($row = mysqli_fetch_array($res)){
               ?>
             <option value="<?php echo $row['id_utilisateur']; ?>"> <?php echo $row['nom']; ?> <?php echo $row['prenom']; ?></option>
           <?php } ?>
             </select>
-          </div>          
+          </div>
         </div>
         <div class="form-group row">
           <label for="montant" class="col-sm-3 col-form-label offset-md-2"> Montant:</label>
-          <div class="col-lg-4">          
+          <div class="col-lg-4">
             <input type="number"  step ="0.01"  min="0"  class ="form-control" id="montant" name="montant" placeholder="montant de la transaction"  required>
           </div>
-        </div>          
+        </div>
         <br />
         <div class="form-group row justify-content-center">
           <div class="col-2 ">
           <input type ="submit" value="Confirmer"  name="confirmer">
           </div>
         </div>
-        
+
         <?php
         if( isset($_POST['trans']) && isset($_POST['des_trans']) && isset($_POST['montant']) && isset($_POST['source']) && isset($_POST['cible'])){
         if( !empty($_POST['trans']) && !empty($_POST['des_trans'])  && !empty($_POST['montant']) && !empty($_POST['source']) && !empty($_POST['cible'])){
@@ -136,7 +136,6 @@ createTableAmitie();
        $res2 = mysqli_fetch_assoc($r2);
        $nom_cible = $res2["nom"];
        $prenom_cible = $res2["prenom"];
-
        $request = "INSERT INTO `transaction` (`nom_de_la_transaction`,`statut`,`id_utilisateur_source`,`id_utilisateur_cible`,`montant`,`date_et_heure_de_creation`,`message`) VALUES ( '".$_POST['trans']."','". $statut."','". $_POST['source']."','". $_POST['cible'] ."','". $_POST['montant'] ."','". $date_creation."','".$_POST['des_trans']."')";
        executeRequest($connexion,$request);
        ?>

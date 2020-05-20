@@ -189,14 +189,26 @@
     {
       $bdd = connectDatabase($log);
       //SQL request to create user table
-      $select = "SELECT * FROM transaction WHERE (
+      $select_plus = "SELECT * FROM transaction WHERE
         (id_utilisateur_source='$myId' AND id_utilisateur_cible='$friendId' AND statut='Ouvert')
-        Or
-        (id_utilisateur_source='$friendId' AND id_utilisateur_cible='$myId' AND statut='Ouvert'))";
+        ORDER BY montant ASC";
+      $select_moins = "SELECT * FROM transaction WHERE
+        (id_utilisateur_source='$friendId' AND id_utilisateur_cible='$myId' AND statut='Ouvert')
+        ORDER BY montant DESC";
 
-      $result = executeRequest($bdd,$select,$log);
+      $result_plus = executeRequest($bdd,$select_plus,$log);
+      $result_moins = executeRequest($bdd,$select_moins,$log);
       $rows = array();
-      while($row = $result->fetch_assoc()) {
+      while($row = $result_moins->fetch_assoc()) {
+        $ind = sizeof($rows);
+        $row['montant']= -$row['montant'];
+        $rows += array($ind => $row);
+
+        if ($log){
+          echo "montant: " . $row["montant"]."<br>";
+        }
+      }
+      while($row = $result_plus->fetch_assoc()) {
         $ind = sizeof($rows);
         $rows += array($ind => $row);
 
