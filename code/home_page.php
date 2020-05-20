@@ -129,7 +129,7 @@ if (!empty($CloseDate) && !empty($CloseMessage)){
 
               if ($solde > 0){
                echo "<tr><td>"; ?> <a id="friendColor" href="historique_page.php?selection=<?php echo $friend['email'] ?>"><?php echo $friend['prenom']." ".$friend['nom']."</a></td>";
-               echo "<td>".$solde."€</td>";
+               echo "<td>".$solde."€</td> </form> ";
                echo "<td><button type=\"button\" class=\"btn btn-danger\" data-toggle=\"modal\" data-target=\"#u_".$friend['id_utilisateur']."\">Fermer</button>";
                createPopup($me,$friend);
                echo "<button type=\"button\" class=\"btn btn-info\" data-toggle=\"modal\" data-target=\"#u_a_".$friend['id_utilisateur']."\">Tout fermer</button>";
@@ -142,7 +142,6 @@ if (!empty($CloseDate) && !empty($CloseMessage)){
             ?>
           </tbody>
         </table>
-        </form>
     </div>
   </div>
 </div>
