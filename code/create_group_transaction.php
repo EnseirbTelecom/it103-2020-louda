@@ -22,7 +22,7 @@ createTableUtilisateur();
 createTableTransaction();
 createTableAmitie();
 
-<<<<<<< HEAD
+
 if(isset($_POST['submit'])){
 
 
@@ -51,15 +51,12 @@ if(isset($_POST['submit'])){
         echo $sq;
         $g=mysqli_query($connexion , $sq);
 
-      }
+
       $ss = "DELETE FROM `transaction` WHERE id_utilisateur_cible = id_utilisateur_source ";
     mysqli_query($connexion,$ss);
-    }
+  }}
 
   }
-
-
-
 
     else{
 
@@ -76,22 +73,11 @@ if(isset($_POST['submit'])){
       $taille_source= count($source);
       $taille_cible = count($cible);
 
-
                 header("location: trans_g_ne.php");
     }
   }
 
-
-
  ?>
-
-
-=======
-
-?>
->>>>>>> 4a2380a03752d2a1b2c50cb9b9e02405bdaff169
-
-
 
 <!DOCTYPE html>
 
@@ -99,10 +85,10 @@ if(isset($_POST['submit'])){
 <head>
   <meta charset="utf-8">
   <title> Transaction </title>
-<<<<<<< HEAD
+
   <link rel="stylesheet" href="Louda.css">
-=======
->>>>>>> 4a2380a03752d2a1b2c50cb9b9e02405bdaff169
+
+
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 
@@ -112,11 +98,10 @@ if(isset($_POST['submit'])){
             <h1 class="my-0 mr-md-auto font-weight-normal">Titre du site</h1>
             <div class="container">
                 <div class="row ">
-<<<<<<< HEAD
                   <div class= "col-1"> <a id="navbar" href ='home_page.php'>Accueil</a></div>
                   <div class= "col-2"> <a id="navbar" href ='contact_page.php'> Carnet d'amis</a></div>
                   <div class= "col-3"> <a id="navbar"  href ='create_transaction_page.php'> Transaction simple </a></div>
-                  <div class= "col-3"> <a id="navbarBg" class="col-sm bg rounded text-center" href ='create_groupe_transaction.php'>  Transaction groupe </a></div>
+                  <div class= "col-3"> <a id="navbarBg" class="col-sm bg rounded text-center" href ='create_group_transaction.php'>  Transaction groupe </a></div>
                   <div class= "col-3"> <a id="navbar" href ='historique_page.php'> Mes transactions</a></div>
                 </div>
             </div>
@@ -127,27 +112,10 @@ if(isset($_POST['submit'])){
       </div>
 
 
-      <div class ="container">
-
-
-          <form class ="form-horizontal" action= "create_group_transaction.php" method="post" >
-            <div class="form-group row">
-
-
-=======
-                    <div class= "col"> <a href ='home_page.php'> Home</a></div>
-                    <div class= "col"> <a href ='contact_page.php'> Carnet d'amis</a></div>
-                    <div class= "col"> <a class="col-sm bg-primary text-white rounded text-center" href ='create_transaction_page.php'> Nouvelle transaction</a></div>
-                    <div class= "col"> <a href ='historique_page.php'> Historique</a></div>
-                </div>
-            </div>
-            <a class="btn btn-outline-primary" id="signin" href="déconnexion.php">Déconnexion</a>
-      </div>
 
       <div class ="container">
           <form class ="form-horizontal" action= "create_group_transaction.php" method="post" >
             <div class="form-group row">
->>>>>>> 4a2380a03752d2a1b2c50cb9b9e02405bdaff169
               <label for="trans" class="col-sm-3 col-form-label offset-md-2"> Nom de la transaction : </label>
               <div class="col-lg-4">
                 <input type="text" class ="form-control" id="trans" name="trans"  placeholder="Nom de la transaction" required >
@@ -169,7 +137,6 @@ if(isset($_POST['submit'])){
             <br/>
 
           <div class="form-group row">
-<<<<<<< HEAD
               <h6>Les utilisateurs sources:</h6>
               <?php
 
@@ -195,22 +162,12 @@ if(isset($_POST['submit'])){
 
               ?>
             <input   type="checkbox" name = "source[]"  value="<?php echo $id_u; ?> "> <?php echo $row['nom'] ?> <?php echo $row['prenom'] ;?></option>
-=======
 
-              <?php
-                $req ='SELECT nom , prenom , id_utilisateur FROM utilisateur ORDER BY nom , prenom';
-                $res=mysqli_query($connexion , $req);
-                while($row = mysqli_fetch_array($res)){
-
-              ?>
-            <input   type="checkbox" name = "source[]"  value="<?php echo $row['id_utilisateur']; ?> "> <?php echo $row['nom'] ?> <?php echo $row['prenom'] ;?></option>
->>>>>>> 4a2380a03752d2a1b2c50cb9b9e02405bdaff169
             <?php
-              }
+          }
             ?>
 
         </div>
-<<<<<<< HEAD
         <div class="form-group row">
 
           <h6> Les utilisateurs cibles </h6>
@@ -239,7 +196,7 @@ if(isset($_POST['submit'])){
             ?>
           <input   type="checkbox" name = "cible[]"  value="<?php echo $id_u; ?> "> <?php echo $row['nom'] ?> <?php echo $row['prenom'] ;?></option> <br>
           <?php
-            }
+        }
           ?>
         </div>
 
@@ -255,33 +212,6 @@ if(isset($_POST['submit'])){
           <input type ="submit" name="submit" value="submit">
         </div>
    </form>
-
-
-=======
-
-          <input type ="submit" name="submit" value="submit">
-   </form>
-
-
-<?php
-
-if(isset($_POST['source'])){
-  if(!empty($_POST['source'])){
-    $_SESSION['source']= $_POST['source'];
-    $_SESSION['trans']=$_POST['trans'];
-    $_SESSION['montant_grp']=$_POST['montant_grp'];
-
-      header("location: cible_grp.php");
-
-  }
-}
-
- ?>
->>>>>>> 4a2380a03752d2a1b2c50cb9b9e02405bdaff169
-
-
-
-
 </div>
   </body>
 </html>
