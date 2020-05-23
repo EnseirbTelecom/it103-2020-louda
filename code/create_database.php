@@ -63,12 +63,13 @@
        id_utilisateur_source INT(11),
        id_utilisateur_cible INT(11),
        nom_de_la_transaction TEXT ,
-       date_et_heure_de_creation DATETIME NOT NULL,
+       date_et_heure_de_creation DATETIME ,
        date_de_fermeture DATETIME,
        montant DECIMAL(10,2),
        message_cloture TEXT,
        message TEXT,
-       statut TEXT NOT NULL)";
+       statut TEXT ,
+       montant_groupe DECIMAL(10,2))";
      executeRequest($bdd,$create,$log);
      $bdd->close();
    }

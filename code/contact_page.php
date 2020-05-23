@@ -95,10 +95,11 @@ if(isset($_POST['submit']))
         <h1 class="my-0 mr-md-auto font-weight-normal">Louda</h1>
         <div class="container">
             <div class="row ">
-                <div class= "col"> <a id="navbar" href ='home_page.php'>Accueil</a></div>
-                <div class= "col"> <a id="navbarBg" class="col-sm bg rounded text-center" href ='contact_page.php'> Carnet d'amis</a></div>
-                <div class= "col"> <a id="navbar" href ='create_transaction_page.php'> Nouvelle transaction</a></div>
-                <div class= "col"> <a id="navbar" href ='historique_page.php'> Mes transactions</a></div>
+                <div class= "col-1"> <a id="navbar" href ='home_page.php'>Accueil</a></div>
+                <div class= "col-2"> <a id="navbarBg" class="col-sm bg rounded text-center" href ='contact_page.php'> Carnet d'amis</a></div>
+                <div class= "col-3"> <a id="navbar" href ='create_transaction_page.php'> Transaction simple</a></div>
+                <div class= "col-3"> <a id="navbar" href ='create_groupe_transaction.php'>  Transaction de groupe </a></div>
+                <div class= "col-3"> <a id="navbar" href ='historique_page.php'> Mes transactions</a></div>
             </div>
         </div>
         <button id="signout" data-toggle="modal" data-target="#SignOut" href="déconnexion.php">
