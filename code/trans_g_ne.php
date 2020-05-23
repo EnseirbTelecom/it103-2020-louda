@@ -74,6 +74,7 @@ if(empty($_SESSION['source']) || empty($_SESSION['cible'])){
    $source = $_SESSION['source'];
    $cible = $_SESSION['cible'];
    $trans = $_SESSION['trans'];
+   $type = "groupe";
   $des_trans = $_SESSION['des_trans'];
      $montant_grp = $_SESSION['montant_grp'];
    $statut = "ouvert";
@@ -91,7 +92,7 @@ if(empty($_SESSION['source']) || empty($_SESSION['cible'])){
            $id_source = intval($source[$j]);
                      if($id_source != $id_cible){
 
-               $request="INSERT INTO `transaction` (`id_utilisateur_source`,`id_utilisateur_cible`,`montant_groupe`,`nom_de_la_transaction`,`statut`,`date_et_heure_de_creation`,`message`) VALUES ( '".$id_cible."','".$id_source."','".$montant_grp."','".$trans."','".$statut."','".$date_creation."','".$des_trans."')";
+               $request="INSERT INTO `transaction` (`id_utilisateur_source`,`id_utilisateur_cible`,`type_de_transaction`,`montant_groupe`,`nom_de_la_transaction`,`statut`,`date_et_heure_de_creation`,`message`) VALUES ( '".$id_cible."','".$id_source."','".$type."','".$montant_grp."','".$trans."','".$statut."','".$date_creation."','".$des_trans."')";
                mysqli_query($connexion, $request);
                $req_s = "DELETE FROM `transaction` WHERE id_utilisateur_cible = id_utilisateur_source";
                mysqli_query($connexion,$req_s);
