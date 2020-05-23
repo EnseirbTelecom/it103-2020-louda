@@ -43,20 +43,17 @@ if(isset($_POST['submit'])){
     for($i=0;$i<$taille_source;$i++){
       for($j=0;$j<$taille_cible;$j++){
         $id_source = intval($source[$i]);
-        $id_cible =intval($source[$j]);
+        $id_cible =intval($cible[$j]);
         $montant_cible=$montant_grp/$taille_cible;
         $montant_sim = $montant_cible/$taille_source;
-
-        echo $montant_sim;
-
-
         $sq  = "INSERT INTO `transaction` (`id_utilisateur_source` , `id_utilisateur_cible` ,`type_de_transaction`,`montant`,`montant_groupe`,`statut`,`date_et_heure_de_creation`,`nom_de_la_transaction`,`message`) VALUES (".$id_source.",".$id_cible.",'".$type."',".$montant_sim.",".$montant_grp.",'".$statut."','".$date_creation."','".$_POST['trans']."','".$_POST['des_trans']."')";
         mysqli_query($connexion , $sq);
-
        if($id_source==$id_cible){
       $ss = "DELETE FROM `transaction` WHERE id_utilisateur_cible = ".$id_cible." AND id_utilisateur_source=".$id_source." ";
+
     mysqli_query($connexion,$ss);}
   } } }
+
     else{
 
       $_SESSION['trans']= $_POST['trans'];
@@ -73,8 +70,8 @@ if(isset($_POST['submit'])){
       $taille_cible = count($cible);
 
                 header("location: trans_g_ne.php");
-    } }
-
+    }
+  }
 
  ?>
 
