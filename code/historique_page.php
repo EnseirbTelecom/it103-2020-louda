@@ -69,7 +69,7 @@ else{
         <div id="green" class="container">
             <div class="row ">
                 <div class= "col-1"> <a id="navbar" href ='home_page.php'>Accueil</a></div>
-                <div class= "col-2"> <a id="navbar" href ='contact_page.php'> Carnet d'amis</a></div>
+                <div class= "col-2"> <a id="navbar" href ='contact_page.php'>Carnet d'amis</a></div>
                 <div class= "col-3"> <a id="navbar" href ='create_transaction_page.php'>Transaction simple</a></div>
                 <div class= "col-3"> <a id="navbar" href ='create_group_transaction.php'>  Transaction de groupe </a></div>
                 <div class= "col"> <a id="navbarBg" class="col-sm bg rounded text-center" href ='historique_page.php'> Mes transactions </a></div>
@@ -159,15 +159,23 @@ else{
                   }
                 }
                 foreach ( $rows as $user) {
+                  if ($transaction['montant_groupe']!=NULL){
+                    $italique = "<I>";
+                    $finItalique = "</I>";
+                  }
+                  else{
+                    $italique = "";
+                    $finItalique = "";
+                  }
             ?>
               <tr <?php if ($transaction['statut']!='Ouvert') { ?> class="table-secondary" <?php }?> >
-                <td><?php echo $user['prenom']." ".$user['nom']; ?></td>
-                <td><?php echo $transaction['nom_de_la_transaction'];?></td>
+                <td><?php echo $italique.$user['prenom']." ".$user['nom'].$finItalique; ?></td>
+                <td><?php echo $italique.$transaction['nom_de_la_transaction'].$finItalique;?></td>
                 <td <?php if ($var==1){echo 'id="red"';?>><?php echo "- ".$transaction['montant']; ?><?php } elseif ($var==0) {echo 'id="green"';?>><?php echo "+ ".$transaction['montant'];} ?></td>
-                <td><?php echo $transaction['message']; ?></td>
-                <td><?php echo $transaction['date_et_heure_de_creation']; ?></td>
-                <td><?php echo $transaction['date_de_fermeture']; ?></td>
-                <td><?php echo $transaction['statut']; ?></td>
+                <td><?php echo $italique.$transaction['message'].$finItalique; ?></td>
+                <td><?php echo $italique.$transaction['date_et_heure_de_creation'].$finItalique; ?></td>
+                <td><?php echo $italique.$transaction['date_de_fermeture'].$finItalique; ?></td>
+                <td><?php echo $italique.$transaction['statut'].$finItalique; ?></td>
                 <td><?php if ($transaction['statut']=='Ouvert') { ?>
                   </form>
                 <div class="row">

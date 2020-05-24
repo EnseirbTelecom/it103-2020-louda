@@ -69,52 +69,56 @@ if(empty($_SESSION['source']) || empty($_SESSION['cible'])){
     <?php
 
 
-   $taille_source = count(($_SESSION['source']));
-   $taille_cible = count($_SESSION['cible']);
-   $source = $_SESSION['source'];
-   $cible = $_SESSION['cible'];
-   $trans = $_SESSION['trans'];
-   $type = "groupe";
-  $des_trans = $_SESSION['des_trans'];
-     $montant_grp = $_SESSION['montant_grp'];
-   $statut = "ouvert";
-   $date_creation =  date('Y-m-d H:i:s');
+    if(!isset($_POST['submit'])){
+      $taille_source = count(($_SESSION['source']));
+      $taille_cible = count($_SESSION['cible']);
+      $source = $_SESSION['source'];
+      $cible = $_SESSION['cible'];
+      $trans = $_SESSION['trans'];
+      $type = "groupe";
+      $des_trans = $_SESSION['des_trans'];
+      $montant_grp = $_SESSION['montant_grp'];
+      $statut = "Ouvert";
+      $date_creation =  date('Y-m-d H:i:s');
 
-   for($i=0;$i<$taille_cible;$i++){
-     $id_cible = intval($cible[$i]);
-         $req1 ="SELECT nom , prenom FROM utilisateur WHERE id_utilisateur =  '".$id_cible."' ORDER BY nom , prenom ";
-         $res1=mysqli_query($connexion , $req1);
-         $row1 = mysqli_fetch_assoc($res1);
-         $nom_cible = $row1["nom"];
-         $prenom_cible = $row1["prenom"];
-         for($j=0;$j<$taille_source;$j++){
+      for($i=0;$i<$taille_cible;$i++){
+        $id_cible = intval($cible[$i]);
+        $req1 ="SELECT nom , prenom FROM utilisateur WHERE id_utilisateur =  '".$id_cible."' ORDER BY nom , prenom ";
+        $res1=mysqli_query($connexion , $req1);
+        $row1 = mysqli_fetch_assoc($res1);
+        $nom_cible = $row1["nom"];
+        $prenom_cible = $row1["prenom"];
+        for($j=0;$j<$taille_source;$j++){
 
-           $id_source = intval($source[$j]);
-                     if($id_source != $id_cible){
+         $id_source = intval($source[$j]);
+         if($id_source != $id_cible){
 
-               $request="INSERT INTO `transaction` (`id_utilisateur_source`,`id_utilisateur_cible`,`type_de_transaction`,`montant_groupe`,`nom_de_la_transaction`,`statut`,`date_et_heure_de_creation`,`message`) VALUES ( '".$id_cible."','".$id_source."','".$type."','".$montant_grp."','".$trans."','".$statut."','".$date_creation."','".$des_trans."')";
-               mysqli_query($connexion, $request);
-               $req_s = "DELETE FROM `transaction` WHERE id_utilisateur_cible = id_utilisateur_source";
-               mysqli_query($connexion,$req_s);
-               $sql = "SELECT MAX(id_transaction) AS id_transaction FROM transaction";
-               $res = mysqli_query($connexion,$sql);
-               $row= mysqli_fetch_assoc($res);
-               $last_id = $row["id_transaction"];
+           $request="INSERT INTO `transaction` (`id_utilisateur_source`,`id_utilisateur_cible`,`montant_groupe`,`nom_de_la_transaction`,`statut`,`date_et_heure_de_creation`,`message`) VALUES ( '".$id_cible."','".$id_source."','".$montant_grp."','".$trans."','".$statut."','".$date_creation."','".$des_trans."')";
+           mysqli_query($connexion, $request);
+           $req_s = "DELETE FROM `transaction` WHERE id_utilisateur_cible = id_utilisateur_source";
+           mysqli_query($connexion,$req_s);
+           $sql = "SELECT MAX(id_transaction) AS id_transaction FROM transaction";
+           $res = mysqli_query($connexion,$sql);
+           $row= mysqli_fetch_assoc($res);
+           $last_id = $row["id_transaction"];
+           echo "<input type=\"hidden\" value=".$last_id." name=\"last_id\">";
 
 
 
-               $req2 ="SELECT nom , prenom FROM utilisateur WHERE id_utilisateur =  '".$id_source."'  ORDER BY nom , prenom ";
-               $res2 =mysqli_query($connexion , $req2);
-               $row2 = mysqli_fetch_assoc($res2);
-               $nom_source = $row2["nom"];
-               $prenom_source = $row2["prenom"];?>
-              <label> <?php echo $nom_cible ?> <?php echo $prenom_cible ?> doit à <?php echo $nom_source ?> <?php echo $prenom_source ?>: <br> </label>
-              <input type="number"  step ="0.01"  min="0"  class ="form-control" id="montant" name="montant[]" placeholder="montant de la transaction"  required>
+           $req2 ="SELECT nom , prenom FROM utilisateur WHERE id_utilisateur =  '".$id_source."'  ORDER BY nom , prenom ";
+           $res2 =mysqli_query($connexion , $req2);
+           $row2 = mysqli_fetch_assoc($res2);
+           $nom_source = $row2["nom"];
+           $prenom_source = $row2["prenom"];?>
+          <label> <?php echo $nom_cible ?> <?php echo $prenom_cible ?> doit à <?php echo $nom_source ?> <?php echo $prenom_source ?>: <br> </label>
+          <input type="number"  step ="0.01"  min="0"  class ="form-control" id="montant" name="montant[]" placeholder="montant de la transaction"  required>
 
 
 <?php
    }
- }  }
+  }
+ }
+}
 
  ?>
 <input type ="submit" name="submit" value="submit">
@@ -124,47 +128,46 @@ if(empty($_SESSION['source']) || empty($_SESSION['cible'])){
 
 if(isset($_POST['submit'])){
 
-$somme=0;
-$tab = $_POST['montant'];
-$taille_insertion = count($tab);
- $montant_grp = $_SESSION['montant_grp'];
-$last__id = intval($last_id);
-$init = $last__id - $taille_insertion;
-for($i=$init +1 ;$i<=$last__id;$i++){
-$id =$i;
-$montant_simple = intval($tab[$i-$init -1]);
-$somme=$somme+$montant_simple;
-if(empty($montant_simple)){
-  $s="DELETE FROM `transaction` WHERE `transaction`.`id_transaction` = '".$id."' ";
-mysqli_query($connexion,$s);
-}
-$sql ="UPDATE transaction SET  montant = ".$montant_simple."  WHERE id_transaction = ".$id."";
-mysqli_query($connexion,$sql);}
+  $somme=0;
+  $tab = $_POST['montant'];
+  $taille_insertion = count($tab);
+  $montant_grp = $_SESSION['montant_grp'];
+  $last_id = $_POST['last_id'];
+  $last__id = intval($last_id);
+  $init = $last__id - $taille_insertion;
 
-if($somme != $montant_grp){
   for($i=$init +1 ;$i<=$last__id;$i++){
-  $id =$i;
+    $id =$i;
+    $montant_simple = intval($tab[$i-$init -1]);
+    $somme=$somme+$montant_simple;
 
+    if(empty($montant_simple)){
+      $s="DELETE FROM `transaction` WHERE `transaction`.`id_transaction` = '".$id."' ";
+      mysqli_query($connexion,$s);
+    }
+    echo $id;
+    $sql ="UPDATE transaction SET  montant = ".$montant_simple."  WHERE id_transaction = ".$id."";
+    executeRequest($connexion,$sql,true);
+  }
 
-  $ss = "DELETE FROM `transaction` WHERE `transaction`.`id_transaction` = '".$id."' ";
-mysqli_query($connexion,$ss);
+  if($somme != $montant_grp){
+    for($i=$init +1 ;$i<=$last__id;$i++){
+      $id =$i;
+      $ss = "DELETE FROM `transaction` WHERE `transaction`.`id_transaction` = '".$id."' ";
+      mysqli_query($connexion,$ss);
+    }
+    ?>
+    <div class="alert alert-danger" role = "alert"><?php echo "Les montants saisies sont erronés.";?> </div> <?php
+  }
+  else{
+    unset($_SESSION['source']);
+    unset($_SESSION['trans']);
+    unset($_SESSION['montant_grp']);
+    unset($_SESSION['source']);
+    unset($_SESSION['cible'] );
+    #//header("location: historique_page.php");
+  }
 }
-  ?>
-  <div class="alert alert-danger" role = "alert"><?php echo "Les montants saisies sont erronés.";?> </div> <?php
-
-}
-else{
-  unset($_SESSION['source']);
-  unset($_SESSION['trans']);
-  unset($_SESSION['montant_grp']);
-  unset($_SESSION['source']);
-  unset($_SESSION['cible'] );
-  header("location: historique_page.php");
-
-}}
-
-
-
 
 ?>
 </body>

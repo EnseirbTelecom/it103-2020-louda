@@ -28,7 +28,7 @@ if(isset($_POST['submit'])){
 
 
   if($_POST['repartition'] == "egale"){
-    $statut = "ouvert";
+    $statut = "Ouvert";
     $_SESSION['trans']= $_POST['trans'];
     $_SESSION['montant_grp'] = $_POST['montant_grp'];
     $_SESSION['source']= $_POST['source'];
@@ -46,8 +46,8 @@ if(isset($_POST['submit'])){
         $id_cible =intval($cible[$j]);
         $montant_cible=$montant_grp/$taille_cible;
         $montant_sim = $montant_cible/$taille_source;
-        $sq  = "INSERT INTO `transaction` (`id_utilisateur_source` , `id_utilisateur_cible` ,`type_de_transaction`,`montant`,`montant_groupe`,`statut`,`date_et_heure_de_creation`,`nom_de_la_transaction`,`message`) VALUES (".$id_source.",".$id_cible.",'".$type."',".$montant_sim.",".$montant_grp.",'".$statut."','".$date_creation."','".$_POST['trans']."','".$_POST['des_trans']."')";
-        mysqli_query($connexion , $sq);
+        $sq  = "INSERT INTO `transaction` (`id_utilisateur_source` , `id_utilisateur_cible` ,`montant`,`montant_groupe`,`statut`,`date_et_heure_de_creation`,`nom_de_la_transaction`,`message`) VALUES (".$id_source.",".$id_cible.",".$montant_sim.",".$montant_grp.",'".$statut."','".$date_creation."','".$_POST['trans']."','".$_POST['des_trans']."')";
+        executeRequest($connexion , $sq,true);
        if($id_source==$id_cible){
       $ss = "DELETE FROM `transaction` WHERE id_utilisateur_cible = ".$id_cible." AND id_utilisateur_source=".$id_source." ";
 
@@ -69,7 +69,7 @@ if(isset($_POST['submit'])){
       $taille_source= count($source);
       $taille_cible = count($cible);
 
-                header("location: trans_g_ne.php");
+      header("location: trans_g_ne.php");
     }
   }
 

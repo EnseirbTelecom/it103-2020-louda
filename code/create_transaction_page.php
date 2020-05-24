@@ -44,6 +44,7 @@ createTableAmitie();
                   <div class= "col"> <a id="navbar" href ='home_page.php'>Accueil</a></div>
                   <div class= "col"> <a id="navbar" href ='contact_page.php'> Carnet d'amis</a></div>
                   <div class= "col"> <a id="navbarBg" class="col-sm bg rounded text-center" href ='create_transaction_page.php'> Nouvelle transaction</a></div>
+                  <div class= "col"> <a id="navbar" href ='create_group_transaction.php'>  Transaction de groupe </a></div>
                   <div class= "col"> <a id="navbar" href ='historique_page.php'> Mes transactions</a></div>
               </div>
           </div>

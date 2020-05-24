@@ -78,7 +78,6 @@ function afficher($input){
                   <div class= "col-2"> <a id="navbar" href ='contact_page.php'> Carnet d'amis</a></div>
                   <div class= "col-3"> <a id="navbar" href ='create_transaction_page.php'> Transaction simple</a></div>
                   <div class= "col-3"> <a id="navbar" href ='create_group_transaction.php'>  Transaction de groupe </a></div>
-
                   <div class= "col-3"> <a id="navbar" href ='historique_page.php'> Mes transactions</a></div>
               </div>
           </div>
