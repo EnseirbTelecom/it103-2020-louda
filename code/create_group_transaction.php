@@ -143,7 +143,7 @@ if(isset($_POST['submit'])){
               $utilisateur =  intval($aaa['id_utilisateur']);
               $nom = $aaa['nom'];
               $prenom = $aaa['prenom'];?>
-              <input   type="checkbox" name = "source[]"  value="<?php echo $utilisateur; ?> "> <?php echo $nom; ?> <?php echo $prenom;?></option> <br>
+              <input   type="checkbox" name = "source[]"  value="<?php echo $utilisateur; ?> "> <?php echo $nom; ?> <?php echo $prenom;?> : <?php echo $mail;?></option> <br>
 
 
   <?php
@@ -153,12 +153,12 @@ if(isset($_POST['submit'])){
               while($row0 = mysqli_fetch_array($res)){
                 $id_u = intval($row0[$i]);
 
-                $r ="SELECT nom ,prenom FROM utilisateur  where id_utilisateur= ".$id_u."";
+                $r ="SELECT nom ,prenom ,email FROM utilisateur  where id_utilisateur= ".$id_u."";
                 $rr = mysqli_query($connexion,$r);
                 $row =mysqli_fetch_assoc($rr);
 
               ?>
-            <input   type="checkbox" name = "source[]"  value="<?php echo $id_u; ?> "> <?php echo $row['nom'] ?> <?php echo $row['prenom'] ;?></option>
+            <input   type="checkbox" name = "source[]"  value="<?php echo $id_u; ?> "> <?php echo $row['nom'] ?> <?php echo $row['prenom'] ;?> : <?php echo $row['email'] ;?></option>
 
             <?php
           }
@@ -177,7 +177,7 @@ if(isset($_POST['submit'])){
             $utilisateur =  intval($aaa['id_utilisateur']);
             $nom = $aaa['nom'];
             $prenom = $aaa['prenom'];?>
-            <input   type="checkbox" name = "cible[]"  value="<?php echo $utilisateur; ?> "> <?php echo $nom; ?> <?php echo $prenom;?></option> <br>
+            <input   type="checkbox" name = "cible[]"  value="<?php echo $utilisateur; ?> "> <?php echo $nom; ?> <?php echo $prenom;?> : <?php echo $mail ;?></option> <br>
 
 
 <?php
@@ -186,12 +186,12 @@ if(isset($_POST['submit'])){
             $i=0;
             while($row0 = mysqli_fetch_array($res)){
               $id_u = intval($row0[$i]);
-              $r ="SELECT nom ,prenom FROM utilisateur  where id_utilisateur= ".$id_u."";
+              $r ="SELECT nom ,prenom , email FROM utilisateur  where id_utilisateur= ".$id_u."";
               $rr = mysqli_query($connexion,$r);
               $row =mysqli_fetch_assoc($rr);
 
             ?>
-          <input   type="checkbox" name = "cible[]"  value="<?php echo $id_u; ?> "> <?php echo $row['nom'] ?> <?php echo $row['prenom'] ;?></option> <br>
+          <input   type="checkbox" name = "cible[]"  value="<?php echo $id_u; ?> "> <?php echo $row['nom'] ?> <?php echo $row['prenom'] ;?> : <?php echo $row['email'] ;?></option> <br>
           <?php
         }
           ?>
