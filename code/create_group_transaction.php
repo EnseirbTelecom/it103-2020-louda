@@ -1,6 +1,6 @@
 <?php
 session_start();
-$connexion = mysqli_connect("localhost","admin","it103","louda");
+$connexion = mysqli_connect("localhost","root","","louda");
 if(!$connexion){
   die("erreur de de connexion à la base de données");
 }

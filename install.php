@@ -5,6 +5,7 @@ include("code/database_request.php");
 
 
 createDatabase();
+$log = false;
 $bdd = connectDatabase($log);
 
 // Clean the table to avoid duplicate

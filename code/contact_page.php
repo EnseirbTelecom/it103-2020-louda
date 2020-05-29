@@ -125,7 +125,7 @@ if(isset($_POST['submit']))
         <a href="contact_page.php?selection=search" class="<?php echo "list-group-item list-group-item-action ".$search;?>" >Rechercher un nouvel ami</a>
         <form class="list-group-item list-group-item-action" action="<?php echo "contact_page.php";if($search=="active"){echo "?selection=search";} ?>" method="POST">
           <div class="col">
-            <input type="text"  id="search" name="search" placeholder="Search" value="<?php echo $_POST['search'];?>"  class="form-control">
+            <input type="text"  id="search" name="search" placeholder="Search" value="<?php echo isset( $_POST['search'] ) ? $_POST['search'] : "";?>"  class="form-control">
           </div>
           <div class="col">
             <input type="submit" value="Search">

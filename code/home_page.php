@@ -19,10 +19,10 @@ createTableAmitie();
 $me = getUtilisateurWithEmail($_SESSION["email"]);
 
 
-$CloseMessage = $_POST['message_text'];
-$CloseDate = $_POST['today_date'];
-$CloseStatue = $_POST['Close_reason'];
-$myFriend = $_POST['my_friend'];
+$CloseMessage = isset($_POST['message_text']) ? $_POST['message_text'] : '';
+$CloseDate = isset($_POST['today_date']) ? $_POST['today_date'] : '';
+$CloseStatue = isset($_POST['Close_reason']) ? $_POST['Close_reason'] : '';
+$myFriend = isset($_POST['my_friend']) ? $_POST['my_friend'] : '';
 
 if (!empty($CloseDate) && !empty($CloseMessage)){
   $alltransactions = getTransactionWith($me['id_utilisateur'],$myFriend);
@@ -95,7 +95,7 @@ function afficher($input){
               <tr>
                 <th>Prénom
                       <div class="col">
-                        <input class="form-control" id="search" name="search" type="search" placeholder="Search" aria-label="Search"  value="<?php echo $_POST['search'];?>">
+                        <input class="form-control" id="search" name="search" type="search" placeholder="Search" aria-label="Search"  value="<?php echo isset( $_POST['search'] ) ? $_POST['search'] : "";?>">
                       </div>
                 </th>
 
@@ -109,6 +109,7 @@ function afficher($input){
               $dette = 0;
               $allfriends = getAllFriends($me['id_utilisateur']);
               $allfriends = trierFriend($me,$allfriends);
+	      $selection = "";
               if (isset($_GET['selection'])){
                 $selection = $_GET['selection'];
               }
@@ -135,7 +136,7 @@ function afficher($input){
                    }
                  }
                  else{
-                   echo "<a  href=\"home_page.php?selection=".$friend[id_utilisateur]."\">  show</a>";
+                   echo "<a  href=\"home_page.php?selection=".$friend["id_utilisateur"]."\">  show</a>";
                    echo "</td></tr>";
                  }
                  $dette += $solde;
@@ -156,7 +157,7 @@ function afficher($input){
             <tr>
               <th>Prénom
                     <div class="col">
-                      <input class="form-control" id="search" name="search" type="search" placeholder="Search" aria-label="Search"  value="<?php echo $_POST['search'];?>">
+                      <input class="form-control" id="search" name="search" type="search" placeholder="Search" aria-label="Search"  value="<?php echo isset( $_POST['search'] ) ? $_POST['search'] : "";?>">
                     </div>
               </th>
 
@@ -188,7 +189,7 @@ function afficher($input){
                  }
                }
                else{
-                 echo "<a  href=\"home_page.php?selection=".$friend[id_utilisateur]."\">  show</a>";
+                 echo "<a  href=\"home_page.php?selection=".$friend['id_utilisateur']."\">  show</a>";
                  echo "</td></tr>";
                }
                $credit += $solde;

@@ -2,7 +2,6 @@
     session_start();
     include("create_database.php");
     createDatabase();
-    include("create_utilisateur.php");
     createTableUtilisateur();
     createTableTransaction();
 
@@ -17,7 +16,7 @@
         $error = true;
 
         // Change date format
-        $Date = $_POST['birth'];
+        $Date = isset( $_POST['birth'] ) ? $_POST['birth'] : "" ;
         $newDate = implode('-', array_reverse (explode('/',$Date)));
 
         // Check if Pseudo and email are already taken
@@ -116,7 +115,7 @@
             <div class="form-group row">
                 <label for="fname" class="col-sm-2 col-form-label offset-md-3">Prénom</label>
                 <div class="col-sm-2">
-                    <input type="text"  id="fname" name="fname" placeholder="Prénom" class="form-control" value="<?php echo $_POST['fname'];?>" required> 
+                    <input type="text"  id="fname" name="fname" placeholder="Prénom" class="form-control" value="<?php echo isset( $_POST['fname'] ) ? $_POST['fname'] : "" ;?>" required> 
                     <div class="valid-feedback">Ok !</div>
                     <div class="invalid-feedback">Prénom manquant</div>
                 </div>
@@ -126,7 +125,7 @@
             <div class="form-group row ">
                 <label for="lname" class="col-sm-2 col-form-label offset-md-3">Nom</label>
                 <div class="col-sm-2">
-                    <input type="text"  id="lname" name="lname" placeholder="Nom" class="form-control" value="<?php echo $_POST['lname'];?>" required>
+                    <input type="text"  id="lname" name="lname" placeholder="Nom" class="form-control" value="<?php echo isset( $_POST['lname'] ) ? $_POST['lname'] : "" ;?>" required>
                     <div class="valid-feedback">Ok !</div>
                     <div class="invalid-feedback">Nom manquant</div>
                 </div>
@@ -136,7 +135,7 @@
             <div class="form-group row ">
                 <label for="email" class="col-sm-2 col-form-label offset-md-3">Email</label>
                 <div class="col-sm-2 ">
-                    <input type="email"  id="email" name="email" placeholder="Email" class="form-control" value="<?php echo $_POST['email'];?>" required>
+                    <input type="email"  id="email" name="email" placeholder="Email" class="form-control" value="<?php echo isset( $_POST['email'] ) ? $_POST['email'] : "";?>" required>
                     <div class="valid-feedback">Ok !</div>
                     <div class="invalid-feedback">Email manquant</div>
                 </div>
@@ -151,7 +150,7 @@
             <div class="form-group row ">
                 <label for="birth" class="col-sm-2 col-form-label offset-md-3">Date de naissance</label>
                 <div class="col-sm-2">
-                    <input type="text"  id="birth" name="birth" placeholder="ex : 01/01/2001" class="form-control" value="<?php echo $_POST['birth'];?>" required>
+                    <input type="text"  id="birth" name="birth" placeholder="ex : 01/01/2001" class="form-control" value="<?php echo isset( $_POST['birth'] ) ? $_POST['birth'] : "" ;?>" required>
                     <div class="valid-feedback">Ok !</div>
                     <div class="invalid-feedback">Date de naissance manquante</div>
                 </div>
@@ -161,7 +160,7 @@
             <div class="form-group row ">
                 <label for="pseudo" class="col-sm-2 col-form-label offset-md-3">Pseudo</label>
                 <div class="col-sm-2">
-                    <input type="text"  id="pseudo" name="pseudo" placeholder="Pseudo" value="<?php echo $_POST['pseudo'];?>"  class="form-control">
+                    <input type="text"  id="pseudo" name="pseudo" placeholder="Pseudo" value="<?php echo isset( $_POST['pseudo'] ) ? $_POST['pseudo'] : "" ;?>"  class="form-control">
                 </div>
                 <div class="col-auto ">
                     <!--<?php if ($testpseudo == 1) { ?>-->

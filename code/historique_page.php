@@ -23,19 +23,23 @@ if (isset($_GET['selection'])){
   $s = $_GET['selection'];
 }
 
-//$DateSelected = isset( $_GET['Open_date'] ) ? $_GET['Open_date'] : "" ;
-//$StatueSelected = isset( $_GET['statue'] ) ? $_GET['statue'] : "" ;
-$DateSelected = $_POST['Open_date'];
-$SelectedValue = $_POST['statue'];
-$Debt_selection = $_POST['Account'];
+$DateSelected = isset( $_POST['Open_date'] ) ? $_POST['Open_date'] : "" ;
+$SelectedValue = isset( $_POST['statue'] ) ? $_POST['statue'] : "" ;
+$Debt_selection = isset( $_POST['Account'] ) ? $_POST['Account'] : "";
+$CloseMessage = isset( $_POST['message_text'] ) ? $_POST['message_text'] : "" ;
+$CloseDate = isset( $_POST['today_date'] ) ? $_POST['today_date'] : "" ;
+$CloseStatue = isset( $_POST['Close_reason'] ) ? $_POST['Close_reason'] : "" ;
+$id = isset( $_POST['id_transaction'] ) ? $_POST['id_transaction'] : "" ;
+//$DateSelected = $_POST['Open_date'];
+//$SelectedValue = $_POST['statue'];
+//$Debt_selection = $_POST['Account'];
+//$CloseMessage = $_POST['message_text'];
+//$CloseDate = $_POST['today_date'];
+//$CloseStatue = $_POST['Close_reason'];
+//$id = $_POST['id_transaction'];
 
-$CloseMessage = $_POST['message_text'];
-$CloseDate = $_POST['today_date'];
-$CloseStatue = $_POST['Close_reason'];
-$id = $_POST['id_transaction'];
-
-$NewMessage = $_POST['new_message_text'];
-$NewAmount = $_POST['new_amount'];
+$NewMessage = isset( $_POST['new_message_text'] ) ? $_POST['new_message_text'] : "";
+$NewAmount = isset( $_POST['new_amount'] ) ? $_POST['new_amount'] : "";
 
 if (!empty($NewAmount) || !empty($NewMessage)){
   ModifTransaction($id,$NewMessage,$NewAmount);
@@ -88,7 +92,7 @@ else{
           <tr>
             <th>Prénom
                   <div class="col">
-                    <input class="form-control" id="search" name="search" type="search" placeholder="Search" aria-label="Search"  value="<?php echo $_POST['search'];?>">
+                    <input class="form-control" id="search" name="search" type="search" placeholder="Search" aria-label="Search"  value="<?php echo isset( $_POST['search'] ) ? $_POST['search'] : "";?>">
                   </div>
             </th>
             <th> Nom de la transaction </th>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-$connexion = mysqli_connect("localhost","admin","it103","louda");
+$connexion = mysqli_connect("localhost","root","","louda");
 if(!$connexion){
   die("erreur de de connexion à la base de données");
 }
@@ -31,9 +31,8 @@ $afficher_champs = true;
 ?>
 
 <?php
-
+$alerte = false;
 if(isset($_POST['submit'])){
-  $alerte = false;
   $afficher_champs = false;
   $somme=0;
   $tab = $_POST['montant'];

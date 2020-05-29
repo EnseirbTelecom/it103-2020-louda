@@ -1,11 +1,10 @@
 <?php
 
 include("create_database.php");
-include("create_utilisateur.php");
 
   if(isset($_POST['email']) && isset($_POST['pwd'])){
     if(!empty($_POST['email']) || !empty($_POST['pwd'])){
-      $connexion = mysqli_connect("localhost","admin","it103","louda");
+      $connexion = mysqli_connect("localhost","root","","louda");
       if(!$connexion){
       die("erreur de connexion à la base de donnée");}
 
@@ -13,7 +12,7 @@ include("create_utilisateur.php");
       $pwd = $_POST['pwd'];
 
       $sql = "SELECT count(*) FROM  utilisateur where email = '".$email."' AND mot_de_passe = '".$pwd."' ";
-    $result = mysqli_query($connexion,$sql);
+      $result = mysqli_query($connexion,$sql);
 
       $row = mysqli_fetch_array($result);
       $count = $row['count(*)'];
