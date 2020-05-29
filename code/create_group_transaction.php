@@ -40,6 +40,14 @@ if(isset($_POST['submit'])){
     $taille_source= count($source);
     $taille_cible = count($cible);
     $date_creation =  date('Y-m-d H:i:s');
+    if ($taille_source == 1 && $taille_cible ==1){
+      if ($source[0] != $cible[0]){
+        $sq  = "INSERT INTO `transaction` (`id_utilisateur_source` , `id_utilisateur_cible` ,`montant`,`statut`,`date_et_heure_de_creation`,`nom_de_la_transaction`,`message`) VALUES (".$source[0].",".$cible[0].",".$montant_grp.",'".$statut."','".$date_creation."','".$_POST['trans']."','".$_POST['des_trans']."')";
+        executeRequest($connexion , $sq);
+      }
+      header("location: historique_page.php");
+    }
+    else {
     for($i=0;$i<$taille_source;$i++){
       for($j=0;$j<$taille_cible;$j++){
         $id_source = intval($source[$i]);
@@ -47,29 +55,41 @@ if(isset($_POST['submit'])){
         $montant_cible=$montant_grp/$taille_cible;
         $montant_sim = $montant_cible/$taille_source;
         $sq  = "INSERT INTO `transaction` (`id_utilisateur_source` , `id_utilisateur_cible` ,`montant`,`montant_groupe`,`statut`,`date_et_heure_de_creation`,`nom_de_la_transaction`,`message`) VALUES (".$id_source.",".$id_cible.",".$montant_sim.",".$montant_grp.",'".$statut."','".$date_creation."','".$_POST['trans']."','".$_POST['des_trans']."')";
-        executeRequest($connexion , $sq,true);
+        executeRequest($connexion , $sq);
        if($id_source==$id_cible){
-      $ss = "DELETE FROM `transaction` WHERE id_utilisateur_cible = ".$id_cible." AND id_utilisateur_source=".$id_source." ";
-
-    mysqli_query($connexion,$ss);}
-  } } }
+         $ss = "DELETE FROM `transaction` WHERE id_utilisateur_cible = ".$id_cible." AND id_utilisateur_source=".$id_source." ";
+         mysqli_query($connexion,$ss);}
+      }
+    }
+  }
+}
 
     else{
+        $_SESSION['trans']= $_POST['trans'];
+        $_SESSION['source']= $_POST['source'];
+        $_SESSION['cible'] = $_POST['cible'];
+        $_SESSION['montant_grp'] = $_POST['montant_grp'];
+        $_SESSION['des_trans'] = $_POST['des_trans'];
 
-      $_SESSION['trans']= $_POST['trans'];
-      $_SESSION['source']= $_POST['source'];
-      $_SESSION['cible'] = $_POST['cible'];
-      $_SESSION['montant_grp'] = $_POST['montant_grp'];
-      $_SESSION['des_trans'] = $_POST['des_trans'];
+        $source= $_POST['source'];
+        $cible= $_POST['cible'];
+        $montant_grp=$_POST['montant_grp'];
+        $statut = "Ouvert";
+        $taille_source= count($source);
+        $taille_cible = count($cible);
+        $date_creation =  date('Y-m-d H:i:s');
+        if ($taille_source == 1 && $taille_cible ==1){
+          //echo $source[0].":".$cible[0];
+          if ($source[0] != $cible[0]){
+            $sq  = "INSERT INTO `transaction` (`id_utilisateur_source` , `id_utilisateur_cible` ,`montant`,`statut`,`date_et_heure_de_creation`,`nom_de_la_transaction`,`message`) VALUES (".$source[0].",".$cible[0].",".$montant_grp.",'".$statut."','".$date_creation."','".$_POST['trans']."','".$_POST['des_trans']."')";
+            executeRequest($connexion , $sq);
+          }
+          header("location: historique_page.php");
+        }
+        else{
 
-      $source= $_POST['source'];
-      $cible= $_POST['cible'];
-      $montant_grp=$_POST['montant_grp'];
-
-      $taille_source= count($source);
-      $taille_cible = count($cible);
-
-      header("location: trans_g_ne.php");
+        header("location: trans_g_ne.php");
+      }
     }
   }
 
@@ -91,7 +111,7 @@ if(isset($_POST['submit'])){
     <body>
 
       <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white">
-            <h1 class="my-0 mr-md-auto font-weight-normal">Titre du site</h1>
+            <h1 class="my-0 mr-md-auto font-weight-normal">Louda</h1>
             <div class="container">
                 <div class="row ">
                   <div class= "col-1"> <a id="navbar" href ='home_page.php'>Accueil</a></div>
@@ -133,7 +153,10 @@ if(isset($_POST['submit'])){
             <br/>
 
           <div class="form-group row">
+            <div class=col>
               <h6>Les utilisateurs sources:</h6>
+            </div>
+              <div class="col">
               <?php
 
               $mail = $_SESSION['email'];
@@ -143,8 +166,9 @@ if(isset($_POST['submit'])){
               $utilisateur =  intval($aaa['id_utilisateur']);
               $nom = $aaa['nom'];
               $prenom = $aaa['prenom'];?>
-              <input   type="checkbox" name = "source[]"  value="<?php echo $utilisateur; ?> "> <?php echo $nom; ?> <?php echo $prenom;?> : <?php echo $mail;?></option> <br>
-
+              <div class="row">
+                <input   type="checkbox" name = "source[]"  value="<?php echo $utilisateur; ?> "> <?php echo $nom; ?> <?php echo $prenom;?> : <?php echo $mail;?></input> <br>
+              </div>
 
   <?php
               $req ="SELECT id_utilisateur_2 FROM amitie  where id_utilisateur_1 = '".$utilisateur."' ";
@@ -158,16 +182,19 @@ if(isset($_POST['submit'])){
                 $row =mysqli_fetch_assoc($rr);
 
               ?>
-            <input   type="checkbox" name = "source[]"  value="<?php echo $id_u; ?> "> <?php echo $row['nom'] ?> <?php echo $row['prenom'] ;?> : <?php echo $row['email'] ;?></option>
-
+              <div class="row">
+                <input   type="checkbox" name = "source[]"  value="<?php echo $id_u; ?> "> <?php echo $row['nom'] ?> <?php echo $row['prenom'] ;?> : <?php echo $row['email'] ;?></input>
+              </div>
             <?php
           }
             ?>
-
+          </div>
         </div>
         <div class="form-group row">
-
-          <h6> Les utilisateurs cibles </h6>
+          <div class="col">
+            <h6> Les utilisateurs cibles :</h6>
+          </div>
+          <div class="col">
             <?php
 
             $mail = $_SESSION['email'];
@@ -177,8 +204,9 @@ if(isset($_POST['submit'])){
             $utilisateur =  intval($aaa['id_utilisateur']);
             $nom = $aaa['nom'];
             $prenom = $aaa['prenom'];?>
-            <input   type="checkbox" name = "cible[]"  value="<?php echo $utilisateur; ?> "> <?php echo $nom; ?> <?php echo $prenom;?> : <?php echo $mail ;?></option> <br>
-
+            <div class="row">
+              <input   type="checkbox" name = "cible[]"  value="<?php echo $utilisateur; ?> "> <?php echo $nom; ?> <?php echo $prenom;?> : <?php echo $mail ;?></input>
+            </div>
 
 <?php
             $req ="SELECT id_utilisateur_2 FROM amitie  where id_utilisateur_1 = '".$utilisateur."' ";
@@ -189,25 +217,34 @@ if(isset($_POST['submit'])){
               $r ="SELECT nom ,prenom , email FROM utilisateur  where id_utilisateur= ".$id_u."";
               $rr = mysqli_query($connexion,$r);
               $row =mysqli_fetch_assoc($rr);
-
             ?>
-          <input   type="checkbox" name = "cible[]"  value="<?php echo $id_u; ?> "> <?php echo $row['nom'] ?> <?php echo $row['prenom'] ;?> : <?php echo $row['email'] ;?></option> <br>
+            <div class="row">
+              <input   type="checkbox" name = "cible[]"  value="<?php echo $id_u; ?> "> <?php echo $row['nom'] ?> <?php echo $row['prenom'] ;?> : <?php echo $row['email'] ;?></input>
+            </div>
           <?php
         }
           ?>
         </div>
-
-
-      <div class="form-group row">
-        <label for="repartition" class="col-sm-3 col-form-label offset-md-2">Type de répartition: </label>
-        <div class="col-lg-4">
-          <input type = "radio" id="repartition" name="repartition"  value="egale" >Répartition égale <br>
-            <input type = "radio" id="repartition" name="repartition"  value="non_egale">Répartition non égale <br>
-        </div>
       </div>
-<div class="form-group">
-          <input type ="submit" name="submit" value="submit">
+
+
+      <div class="row">
+        <div class="col">
+          <label for="repartition">Type de répartition: </label>
         </div>
+        <div class="col">
+          <input type = "radio" id="repartition" name="repartition"  value="egale" >Répartition égale <br>
+            <input type = "radio" id="repartition" name="repartition"  value="non_egale" checked>Répartition non égale <br>
+      </div>
+    </div>
+    </br>
+    </br>
+    </br>
+    <div style="text-align:center;">
+      <div class="form-group">
+        <input type ="submit" name="submit" value="Valider"></input>
+      </div>
+    </div>
    </form>
 </div>
   </body>
