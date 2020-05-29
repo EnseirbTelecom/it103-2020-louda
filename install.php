@@ -1,7 +1,7 @@
 <?php
 session_start();
-include("create_database.php");
-include("database_request.php");
+include("code/create_database.php");
+include("code/database_request.php");
 
 
 createDatabase();
@@ -17,7 +17,6 @@ executeRequest($bdd,$reset);
 createTableUtilisateur();
 createTableTransaction();
 createTableAmitie();
-
 
 // Create two users
 
@@ -64,6 +63,6 @@ $result6 = executeRequest($bdd,$transaction4);
 $bdd->close();
 
 echo "install is successful </br>";
-echo "WARNING : LAUNCHING THIS SCRIPT AGAIN WILL CLEAR THE DATABASE"
+echo "WARNING : LAUNCHING THIS SCRIPT AGAIN WILL CLEAR THE DATABASE";
 
 ?>

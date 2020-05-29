@@ -1,8 +1,7 @@
 <?php
 session_start();
-include("create_database.php");
-include("database_request.php");
-
+include("code/create_database.php");
+include("code/database_request.php");
 
 createDatabase();
 $bdd = connectDatabase($log);
@@ -17,7 +16,6 @@ executeRequest($bdd,$reset);
 createTableUtilisateur();
 createTableTransaction();
 createTableAmitie();
-
 
 // Create two users
 
@@ -70,7 +68,6 @@ VALUES ('Transaction groupe','Ouvert','1','4','500','1000','2020-05-15 00:01:03'
 
 // Query all the request
 
-
 executeRequest($bdd,$insert1);
 
 executeRequest($bdd,$insert2);
@@ -102,6 +99,6 @@ executeRequest($bdd,$transaction6);
 $bdd->close();
 
 echo "install is successful </br>";
-echo "WARNING : LAUNCHING THIS SCRIPT AGAIN WILL CLEAR THE DATABASE"
+echo "WARNING : LAUNCHING THIS SCRIPT AGAIN WILL CLEAR THE DATABASE";
 
 ?>
