@@ -129,7 +129,9 @@ function afficher($input){
                    echo "</td></tr>";
                    $alltransactions = getTransactionWith($me['id_utilisateur'],$friend['id_utilisateur']);
                    foreach ($alltransactions as $transaction){
-                     echo "<tr><td>".$transaction['nom_de_la_transaction']."</td><td>".$transaction['montant']."€</td> </tr>";
+                     $italique = "";
+                     if ($transaction["montant_groupe"]!=NULL){$italique="<I>";}
+                     echo "<tr><td>".$italique.$transaction['nom_de_la_transaction']."</td><td>".$transaction['montant']."€</I></td> </tr>";
                    }
                  }
                  else{
@@ -180,7 +182,9 @@ function afficher($input){
                  echo "</td></tr>";
                  $alltransactions = getTransactionWith($me['id_utilisateur'],$friend['id_utilisateur']);
                  foreach ($alltransactions as $transaction){
-                   echo "<tr><td>".$transaction['nom_de_la_transaction']."</td><td>".$transaction['montant']."€</td> </tr>";
+                   $italique = "";
+                   if ($transaction["montant_groupe"]!=NULL){$italique="<I>";}
+                   echo "<tr><td>".$italique.$transaction['nom_de_la_transaction']."</td><td>".$transaction['montant']."€</I></td> </tr>";
                  }
                }
                else{

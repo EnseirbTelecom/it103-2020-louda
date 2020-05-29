@@ -41,11 +41,11 @@ createTableAmitie();
           <h1 class="my-0 mr-md-auto font-weight-normal">Louda</h1>
           <div class="container">
               <div class="row ">
-                  <div class= "col"> <a id="navbar" href ='home_page.php'>Accueil</a></div>
-                  <div class= "col"> <a id="navbar" href ='contact_page.php'> Carnet d'amis</a></div>
-                  <div class= "col"> <a id="navbarBg" class="col-sm bg rounded text-center" href ='create_transaction_page.php'> Nouvelle transaction</a></div>
-                  <div class= "col"> <a id="navbar" href ='create_group_transaction.php'>  Transaction de groupe </a></div>
-                  <div class= "col"> <a id="navbar" href ='historique_page.php'> Mes transactions</a></div>
+                <div class= "col-1"> <a id="navbar" href ='home_page.php'>Accueil</a></div>
+                <div class= "col-2"> <a id="navbar" href ='contact_page.php'> Carnet d'amis</a></div>
+                <div class= "col-3"> <a id="navbarBg" class="col-sm bg rounded text-center"  href ='create_transaction_page.php'> Transaction simple </a></div>
+                <div class= "col-3"> <a id="navbar" href ='create_group_transaction.php'>  Transaction groupe </a></div>
+                <div class= "col-3"> <a id="navbar" href ='historique_page.php'> Mes transactions</a></div>
               </div>
           </div>
           <button id="signout" data-toggle="modal" data-target="#SignOut" href="déconnexion.php">
@@ -77,11 +77,33 @@ createTableAmitie();
           <div class="col-lg-4">
             <select name="source" id="source" class='form-control' >
               <?php
-                $req ='SELECT nom , prenom , id_utilisateur FROM utilisateur ORDER BY nom , prenom';
-                $res=mysqli_query($connexion , $req);
-                while($row = mysqli_fetch_array($res)){
+              $mail = $_SESSION['email'];
+              $a = "SELECT id_utilisateur ,nom ,prenom ,email FROM utilisateur  WHERE email = '".$mail."' ";
+              $aa= mysqli_query($connexion,$a);
+              $aaa=mysqli_fetch_assoc($aa);
+              $utilisateur =  intval($aaa['id_utilisateur']);
+              $nom = $aaa['nom'];
+              $prenom = $aaa['prenom'];
+              $email = $aaa['email'];
+
               ?>
-            <option value="<?php echo $row['id_utilisateur']; ?> "> <?php echo $row['nom'] ?> <?php echo $row['prenom'] ;?></option>
+            <option value="<?php echo $utilisateur; ?> "> <?php echo $nom ?> <?php echo $prenom ;?> : <?php echo $email;?></option><br>
+
+<?php
+            $req ="SELECT id_utilisateur_2 FROM amitie  where id_utilisateur_1 = '".$utilisateur."' ";
+            $res=mysqli_query($connexion , $req);
+            $i=0;
+            while($row0 = mysqli_fetch_array($res)){
+              $id_u = intval($row0[$i]);
+
+              $r ="SELECT nom ,prenom , email FROM utilisateur  where id_utilisateur= ".$id_u."";
+              $rr = mysqli_query($connexion,$r);
+              $row =mysqli_fetch_assoc($rr);?>
+
+              <option value="<?php echo $id_u; ?> "> <?php echo $row['nom'] ?> <?php echo $row['prenom'] ;?> : <?php echo $row['email']?></option><br>
+
+
+
             <?php
               }
             ?>
@@ -93,11 +115,32 @@ createTableAmitie();
           <div class="col-lg-4">
             <select name="cible" id="cible" class='form-control'>
               <?php
-                $req ='SELECT nom , prenom , id_utilisateur FROM utilisateur ORDER BY nom,prenom';
-                $res=mysqli_query($connexion , $req);
-                while($row = mysqli_fetch_array($res)){
+              $mail = $_SESSION['email'];
+              $a = "SELECT id_utilisateur ,nom ,prenom , email FROM utilisateur  WHERE email = '".$mail."' ";
+              $aa= mysqli_query($connexion,$a);
+              $aaa=mysqli_fetch_assoc($aa);
+              $utilisateur =  intval($aaa['id_utilisateur']);
+              $nom = $aaa['nom'];
+              $prenom = $aaa['prenom'];
+              $email = $aaa['email']
+
+
               ?>
-            <option value="<?php echo $row['id_utilisateur']; ?>"> <?php echo $row['nom']; ?> <?php echo $row['prenom']; ?></option>
+            <option value="<?php echo $utilisateur; ?> "> <?php echo $nom ?> <?php echo $prenom ;?> : <?php echo $email ;?> </option><br>
+
+<?php
+            $req ="SELECT id_utilisateur_2 FROM amitie  where id_utilisateur_1 = '".$utilisateur."' ";
+            $res=mysqli_query($connexion , $req);
+            $i=0;
+            while($row0 = mysqli_fetch_array($res)){
+              $id_u = intval($row0[$i]);
+
+              $r ="SELECT nom ,prenom ,email FROM utilisateur  where id_utilisateur= ".$id_u."";
+              $rr = mysqli_query($connexion,$r);
+              $row =mysqli_fetch_assoc($rr);?>
+
+              <option value="<?php echo $id_u; ?> "> <?php echo $row['nom'] ?> <?php echo $row['prenom'] ;?> :: <?php echo $row['email']?> </option><br>
+
           <?php } ?>
             </select>
           </div>

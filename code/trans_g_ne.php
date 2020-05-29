@@ -25,6 +25,53 @@ createTableAmitie();
 if(empty($_SESSION['source']) || empty($_SESSION['cible'])){
   header("location: create_group_transaction.php");}
 
+$afficher_champs = true;
+?>
+
+<?php
+
+if(isset($_POST['submit'])){
+  $alerte = false;
+  $afficher_champs = false;
+  $somme=0;
+  $tab = $_POST['montant'];
+  $taille_insertion = count($tab);
+  $montant_grp = $_SESSION['montant_grp'];
+  $last_id = $_POST['last_id'];
+  $last__id = intval($last_id);
+  $init = $last__id - $taille_insertion;
+
+  for($i=$init +1 ;$i<=$last__id;$i++){
+    $id =$i;
+    $montant_simple = intval($tab[$i-$init -1]);
+    $somme=$somme+$montant_simple;
+
+    if(empty($montant_simple)){
+      $s="DELETE FROM `transaction` WHERE `transaction`.`id_transaction` = '".$id."' ";
+      mysqli_query($connexion,$s);
+    }
+    $sql ="UPDATE transaction SET  montant = ".$montant_simple."  WHERE id_transaction = ".$id."";
+    executeRequest($connexion,$sql);
+  }
+
+  if($somme != $montant_grp){
+    for($i=$init +1 ;$i<=$last__id;$i++){
+      $id =$i;
+      $ss = "DELETE FROM `transaction` WHERE `transaction`.`id_transaction` = '".$id."' ";
+      executeRequest($connexion,$ss);
+      $afficher_champs = true;
+      $alerte = true;
+    }
+  }
+  else{
+    unset($_SESSION['source']);
+    unset($_SESSION['trans']);
+    unset($_SESSION['montant_grp']);
+    unset($_SESSION['source']);
+    unset($_SESSION['cible'] );
+    header("location: historique_page.php");
+  }
+}
 
 ?>
 
@@ -44,13 +91,13 @@ if(empty($_SESSION['source']) || empty($_SESSION['cible'])){
 
       <body>
         <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white">
-              <h1 class="my-0 mr-md-auto font-weight-normal">Titre du site</h1>
+              <h1 class="my-0 mr-md-auto font-weight-normal">Louda</h1>
               <div class="container">
                   <div class="row ">
                     <div class= "col-1"> <a id="navbar" href ='home_page.php'>Accueil</a></div>
                     <div class= "col-2"> <a id="navbar" href ='contact_page.php'> Carnet d'amis</a></div>
                     <div class= "col-3"> <a id="navbar"  href ='create_transaction_page.php'> Transaction simple </a></div>
-                    <div class= "col-3"> <a id="navbar"  href ='create_group_transaction.php'>  Transaction de groupe </a></div>
+                    <div class= "col-3"> <a id="navbarBg" class="col-sm bg rounded text-center"  href ='create_group_transaction.php'>  Transaction de groupe </a></div>
                     <div class= "col-3"> <a id="navbar" href ='historique_page.php'> Mes transactions</a></div>
                   </div>
               </div>
@@ -69,7 +116,7 @@ if(empty($_SESSION['source']) || empty($_SESSION['cible'])){
     <?php
 
 
-    if(!isset($_POST['submit'])){
+    if($afficher_champs){
       $taille_source = count(($_SESSION['source']));
       $taille_cible = count($_SESSION['cible']);
       $source = $_SESSION['source'];
@@ -119,56 +166,13 @@ if(empty($_SESSION['source']) || empty($_SESSION['cible'])){
   }
  }
 }
-
- ?>
-<input type ="submit" name="submit" value="submit">
-
-</form>
-<?php
-
-if(isset($_POST['submit'])){
-
-  $somme=0;
-  $tab = $_POST['montant'];
-  $taille_insertion = count($tab);
-  $montant_grp = $_SESSION['montant_grp'];
-  $last_id = $_POST['last_id'];
-  $last__id = intval($last_id);
-  $init = $last__id - $taille_insertion;
-
-  for($i=$init +1 ;$i<=$last__id;$i++){
-    $id =$i;
-    $montant_simple = intval($tab[$i-$init -1]);
-    $somme=$somme+$montant_simple;
-
-    if(empty($montant_simple)){
-      $s="DELETE FROM `transaction` WHERE `transaction`.`id_transaction` = '".$id."' ";
-      mysqli_query($connexion,$s);
-    }
-    echo $id;
-    $sql ="UPDATE transaction SET  montant = ".$montant_simple."  WHERE id_transaction = ".$id."";
-    executeRequest($connexion,$sql,true);
-  }
-
-  if($somme != $montant_grp){
-    for($i=$init +1 ;$i<=$last__id;$i++){
-      $id =$i;
-      $ss = "DELETE FROM `transaction` WHERE `transaction`.`id_transaction` = '".$id."' ";
-      mysqli_query($connexion,$ss);
-    }
-    ?>
-    <div class="alert alert-danger" role = "alert"><?php echo "Les montants saisies sont erronés.";?> </div> <?php
-  }
-  else{
-    unset($_SESSION['source']);
-    unset($_SESSION['trans']);
-    unset($_SESSION['montant_grp']);
-    unset($_SESSION['source']);
-    unset($_SESSION['cible'] );
-    #//header("location: historique_page.php");
-  }
-}
-
 ?>
+
+<input type ="submit" name="submit" value="Valider">
+<?php
+  if ($alerte){?>
+  <div class="alert alert-danger" role = "alert"><?php echo "Les montants saisies sont erronés, la somme des montants doit valoirs :".$montant_grp.".";?> </div>
+<?php } ?>
+</form>
 </body>
 </html>
